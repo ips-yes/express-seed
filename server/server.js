@@ -15,7 +15,7 @@
         passport = require('./middleware/Auth').passport,
         logger = require('./utils/Logger.js');
 
-    let AUTH_PARAMS = deployConfig.auth;
+    let DB_PARAMS = deployConfig.db;
 
     // sets up express validator with options
     // as of now these options do not allow parameters that are not specified in schema through
@@ -42,12 +42,14 @@
     //  SHUTDOWN EVENTS ^^^^^                                                                        //
     //===============================================================================================//
 
-
-    // Verify database connection
+    // Verify database connection and sync if we wish
     try {
         await models.sequelize.authenticate();
+        if(DB_PARAMS.SYNC){
+            await models.sequelize.sync(); //If this is enabled in config.json it will sync the DB to the code
+        }
     } catch(e) {
-        logger.error('Database authentication failed due to: ' + e.message);
+        logger.error('Database configuration failed due to: ' + e.message);
         onServerClosed();
     }
 

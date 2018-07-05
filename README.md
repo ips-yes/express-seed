@@ -1,3 +1,4 @@
+![alt text](https://intelligentproduct.solutions/wp-content/uploads/2017/01/logo_new_web1.png "Logo IPS")
 # express-seed
 
 An arhcitecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
@@ -31,4 +32,6 @@ Project favores the division of classes by feature instead of by class type. Con
 - **utils:** global classes and functions.
 - **config:** global configurations.
 - **middleware:** global middleware.
+
+
 
