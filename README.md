@@ -1,9 +1,15 @@
-![alt text](https://intelligentproduct.solutions/wp-content/uploads/2017/01/logo_new_web1.png "Logo IPS")
+<img src="https://intelligentproduct.solutions/wp-content/uploads/2017/01/logo_new_web1.png" height="60" width="124"/>
+
 # express-seed
 
 An arhcitecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
 
-## Major Node Modules
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="sequelize"/>
+<img src="http://docs.sequelizejs.com/manual/asset/logo-small.png" alt="sequelize" height="100px" width="100px"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png" alt="sequelize" height="100px" width="100px"/>
+
+<br><br>
+
 - **bcrypt:** One way encryption of passwords
 - **joi:** validates the request objects before route entry
 - **passport:** authentication and authorization middleware
