@@ -3,7 +3,7 @@
 # express-seed
 
 An arhcitecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
-<table tablie-layout="fixed" width="500px">
+<table table-layout="fixed" width="500px">
     <tr>
     <td>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="sequelize"/>
