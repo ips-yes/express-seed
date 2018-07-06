@@ -3,7 +3,7 @@
 # express-seed
 
 An arhcitecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
-<table tablie-layout="fixed" width="500px">
+<table table-layout="fixed" width="500px">
     <tr>
     <td>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="sequelize"/>
@@ -51,4 +51,29 @@ Project favores the division of classes by feature instead of by class type. Con
 - **middleware:** global middleware.
 
 
+### Sample Routes
+
+**POST /users/**
+
+This route will create a user. Note that when creating the first user you'll need to remove the authentication middleware temporarily
+
+**required body params**
+- email : string
+- password : string 8 characters, One Uppercase, One Lowercase, One number, One special char
+- user_type_id : int
+
+**POST /users/login**
+
+This route will attempt to login the given user. It will return a session token which must then be provided for authorization on requests
+
+**required body params**
+- email : string
+- password: string
+
+**GET /users/<id>**
+
+This route will get the user with the associated ID.
+
+**required query params**
+- id : int
 
