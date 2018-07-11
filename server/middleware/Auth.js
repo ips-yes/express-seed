@@ -144,4 +144,3 @@ passport.use(new LocalStrategy({passReqToCallback: true, failWithError: true}, (
 
 exports.passport = passport;
 exports.authenticationMiddleware = authenticationMiddleware;
-// exports.revokeAuthenticationMiddleware = revokeAuthenticationMiddleware();

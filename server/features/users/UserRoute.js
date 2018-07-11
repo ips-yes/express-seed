@@ -8,9 +8,7 @@ let express = require('express'),
     logger = require('../../utils/Logger'),
     UserValidation = require('./UserValidation'),
     UserController = require('./UserController'),
-    AUTH_PARAMS = require('../../config').auth,
-    SERVER_PARAMS = require('../../config').app,
-    requestIp = require('request-ip');
+    AUTH_PARAMS = require('../../config').auth;
 
 //===============================================================================================//
 //  ROUTES                                                                                       //
