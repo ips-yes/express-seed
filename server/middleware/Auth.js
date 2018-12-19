@@ -44,44 +44,42 @@ let authenticationMiddleware = async (req, res, next) => {
 };
 
 
-let validateSession = (uuid) => {
-    return User.GetSession(uuid)
-      .then((session) => {
-          if (!session) {
-              let response = constants.AUTH.SESSION_FAIL;
-              logger.warn(response);
-              return Promise.reject(response);
-          } else {
+let validateSession = async (uuid) => {
+    try{
+        let session = await User.GetSession(uuid);
+        if (!session) {
+            let response = constants.AUTH.SESSION_FAIL;
+            logger.warn(response);
+            return Promise.reject(response);
+        } else {
+            let timeNow = moment();
+            let timeThen = moment(session.expires_at);
+            let hoursDiff = moment.duration(timeNow.diff(timeThen)).asHours();
+            if (hoursDiff > AUTH_PARAMS.cookieLife) {
+                //Set the session expired and inactive
+                let updateSession = {
+                    uuid: session.uuid,
+                    active: false,
+                    expired: true
+                };
 
-              let timeNow = moment();
-              let timeThen = moment(session.expires_at);
-              let hoursDiff = moment.duration(timeNow.diff(timeThen)).asHours();
-              if (hoursDiff > AUTH_PARAMS.cookieLife) {
-                  //Set the session expired and inactive
-                  let updateSession = {
-                      uuid: session.uuid,
-                      active: false,
-                      expired: true
-                  };
-
-                  return User.UpdateSession(updateSession)
-                    .then(result => {
-                        if (result) {
-                            let response = constants.AUTH.SESSION_EXPIRED;
-                            logger.warn(response);
-                            return Promise.reject(response);
-                        } else {
-                            let response = constants.HTTP.ERROR.NOT_FOUND;
-                            logger.warn(response);
-                            return Promise.reject(response);
-                        }
-                    })
-              } else {
-                  return Promise.resolve(session);
-              }
-
-          }
-      })
+                let result = await User.UpdateSession(updateSession);
+                      if (result) {
+                          let response = constants.AUTH.SESSION_EXPIRED;
+                          logger.warn(response);
+                          return Promise.reject(response);
+                      } else {
+                          let response = constants.HTTP.ERROR.NOT_FOUND;
+                          logger.warn(response);
+                          return Promise.reject(response);
+                      }
+            } else {
+                return Promise.resolve(session);
+            }
+        }
+    }catch(err){
+        return Promise.reject(err);
+    }
 };
 
 
