@@ -8,7 +8,7 @@ let express = require('express'),
     logger = require('../../utils/Logger'),
     UserValidation = require('./UserValidation'),
     UserController = require('./UserController'),
-    AUTH_PARAMS = require('../../config').auth;
+    AUTH_PARAMS = require('../../config/env_config').auth;
 
 //===============================================================================================//
 //  ROUTES                                                                                       //

@@ -3,7 +3,7 @@ let User = require('./UserRepository'),
     logger = require('../../utils/Logger'),
     EncryptionHelper = require('../../utils/EncryptionHelper'),
     constants = require('../../utils/Constants'),
-    SESSION_LIFE_PARAMS = require('../../config').sessionLife,
+    SESSION_LIFE_PARAMS = require('../../config/env_config').sessionLife,
     moment = require('moment');
 
 

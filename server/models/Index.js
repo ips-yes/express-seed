@@ -1,14 +1,15 @@
 /**
  * Created by anthonyg on 8/19/2016.
  */
+let config = require('../config/env_config');
 let Sequelize = require('sequelize'),
     fs = require('fs'),
     path = require('path'),
-    DB_PARAMS = require('../config').db,
+    DB_PARAMS = config.db,
     modelsDir = path.join(__dirname, '..', 'models'),
     db = {};
-let sequelize = new Sequelize(DB_PARAMS.NAME, DB_PARAMS.USER, DB_PARAMS.PASSWORD, {
-    host: DB_PARAMS.HOST,
+let sequelize = new Sequelize(DB_PARAMS.name, DB_PARAMS.username, DB_PARAMS.password, {
+    host: DB_PARAMS.host,
     dialect: 'postgres',
     logging: false,
     operatorsAliases: false,

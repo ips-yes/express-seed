@@ -2,10 +2,9 @@
  * Created by anthonyg on 4/29/2016.
  */
 let bcrypt = require('bcrypt'),
-    deployConfig = require('../config'),
     logger = require('./Logger');
 
-let BCRYPT_PARAMS = deployConfig.auth.bcrypt;
+let BCRYPT_PARAMS = require('../config/env_config').auth.bcrypt;
 
 
 module.exports = {

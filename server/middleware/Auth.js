@@ -9,7 +9,7 @@ let passport = require('passport'),
     EncryptionHelper = require('../utils/EncryptionHelper'),
     logger = require('../utils/Logger'),
     constants = require('../utils/Constants'),
-    AUTH_PARAMS = require('../config').auth,
+    AUTH_PARAMS = require('../config/env_config').auth,
     User = require('../features/users/UserRepository');
 
 
