@@ -10,12 +10,34 @@
         validate = require('express-validation');
 
     // Application imports
-    let deployConfig = require('./config'),
-        models = require('./models/Index'),
+    let config;
+    let models = require('./models/Index'),
         passport = require('./middleware/Auth').passport,
         logger = require('./utils/Logger.js');
+    try{
+        config = require('./config/env_config');
 
-    let DB_PARAMS = deployConfig.db;
+    }catch(err){
+        logger.error(err.message);
+    }
+
+    switch(config.env){
+      case 'development':
+        logger.info(' DEVELOPMENT '); // eslint-disable-line
+        break;
+      case 'staging':
+      case 'qa':
+        logger.warning(' STAGING / QA '); // eslint-disable-line
+        break;
+      case 'production':
+        logger.error(' PRODUCTION '); // eslint-disable-line
+        break;
+      default:
+        break;
+    }
+
+    let DB_PARAMS = config.db,
+        APP_PARAMS = config.app;
 
     // sets up express validator with options
     // as of now these options do not allow parameters that are not specified in schema through
@@ -45,7 +67,7 @@
     // Verify database connection and sync if we wish
     try {
         await models.sequelize.authenticate();
-        if(DB_PARAMS.SYNC){
+        if(DB_PARAMS.sync){
             await models.sequelize.sync(); //If this is enabled in config.json it will sync the DB to the code
         }
     } catch(e) {
@@ -56,7 +78,7 @@
     //===============================================================================================//
     //  MIDDLEWARE                                                                                   //
     //===============================================================================================//
-    let LIMITER_PARAMS = deployConfig.limiter;
+    let LIMITER_PARAMS = config.limiter;
 
     //rate limit for throttling requests for IP addresses.
     if (LIMITER_PARAMS.enable) {
@@ -91,7 +113,7 @@
     }));
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({extended: true}));
-    app.use(deployConfig.app.PATH, require('./routes'));
+    app.use(APP_PARAMS.path, require('./routes'));
 
     //General Exception Handler
     app.use((err, req, res, next) => {
@@ -116,8 +138,8 @@
     // start the server
     try {
         await new Promise(function (resolve) {
-            http.createServer(app).listen(deployConfig.app.PORT, () => {
-                logger.info('****************************** Server Listening on Port:' + deployConfig.app.PORT + ' ******************************');
+            http.createServer(app).listen(APP_PARAMS.port, () => {
+                logger.info('****************************** Server Listening on Port:' + APP_PARAMS.port + ' ******************************');
                 resolve();
             });
         });

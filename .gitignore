@@ -3,3 +3,4 @@ server/logfile.txt
 .idea
 express-seed.iml
 
+server/config/.env
