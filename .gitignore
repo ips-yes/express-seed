@@ -4,3 +4,4 @@ server/logfile.txt
 express-seed.iml
 
 server/.env
+server/.ebextensions/npm_config
