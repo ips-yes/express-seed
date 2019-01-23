@@ -2,7 +2,7 @@
 
 # express-seed
 
-An arhcitecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
+An architecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
 <table table-layout="fixed" width="500px">
     <tr>
     <td>
