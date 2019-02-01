@@ -1,10 +1,10 @@
 /*Created by anthonyg 01-05-2018*/
 let User = require('./UserRepository'),
-    logger = require('../../utils/Logger'),
-    EncryptionHelper = require('../../utils/EncryptionHelper'),
-    constants = require('../../utils/Constants'),
-    SESSION_LIFE_PARAMS = require('../../config').sessionLife,
-    moment = require('moment');
+  logger = require('../../utils/Logger'),
+  EncryptionHelper = require('../../utils/EncryptionHelper'),
+  constants = require('../../utils/Constants'),
+  SESSION_LIFE_PARAMS = require('../../config').sessionLife,
+  moment = require('moment');
 
 
 let self = module.exports = {
@@ -15,19 +15,17 @@ let self = module.exports = {
      * @returns {PromiseLike<>}
      * @constructor
      */
-    Add(user){
-        return EncryptionHelper.HashPassword(user.password)
-            .then(hash=>{
-                user.password = hash;
-                return Promise.resolve(user);
-            })
-            .then(user=>User.Add(user))
-            .then(newUser=>{
-                //construct response
-                let response = constants.HTTP.SUCCESS.CREATED;
-                response._id = newUser._id;
-                return Promise.resolve(response);
-            })
+    async Add(user) {
+        try {
+            user.password = await EncryptionHelper.HashPassword(user.password);
+            user = await User.Add(user);
+            let response = constants.HTTP.SUCCESS.CREATED;
+            response._id = user._id;
+            return response;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+
     },
 
     /**
@@ -35,34 +33,31 @@ let self = module.exports = {
      * @param _id The id of the user to fetch
      * @returns JSON user
      */
-    GetById(_id){
-        return User.GetById(_id)
-            .then(user=>{
-                //construct response
-                if(!user){
-                    let response = constants.HTTP.ERROR.NOT_FOUND;
-                    return Promise.resolve(response);
-                }
-                else{
-                    return Promise.resolve(user);
-                }
-            })
+    async GetById(_id) {
+        try {
+            let user = await User.GetById(_id);
+            if (!user) {
+                let response = constants.HTTP.ERROR.NOT_FOUND;
+                return Promise.reject(response);
+            }
+            else {
+                return user
+            }
+        } catch (err) {
+            return Promise.reject(err);
+        }
     },
 
     /***
      * using the value from the config for stale session life, it will call the repository to delete old inactive sessions
      * @returns {Promise} with the result or error
      */
-    ClearStaleSessions(){
-        let cutoffDate = moment().subtract(SESSION_LIFE_PARAMS.staleSessionTimeToLiveInDays,'days').toDate();
-        return new Promise((resolve, reject) => {
-            User.ClearStaleSessions(cutoffDate, (err, result) => {
-                if(err) {
-                    return reject(err);
-                } else {
-                    return resolve(result);
-                }
-            })
-        })
+    async ClearStaleSessions() {
+        let cutoffDate = moment().subtract(SESSION_LIFE_PARAMS.staleSessionTimeToLiveInDays, 'days').toDate();
+        try {
+            return await User.ClearStaleSessions(cutoffDate);
+        } catch (err) {
+            return err;
+        }
     }
 };

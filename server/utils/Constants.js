@@ -4,19 +4,19 @@ module.exports = {
             get DELETE() {
                 return {
                     statusCode: 200,
-                    message: {message: "Resource Deleted"}
+                    message: "Resource Deleted"
                 };
             },
             get UPDATE() {
                 return {
                     statusCode: 200,
-                    message: {message: 'Update Successful'}
+                    message: 'Update Successful'
                 };
             },
             get CREATED() {
                 return {
                     statusCode: 201,
-                    message: {message: "Resource Created"}
+                    message: "Resource Created"
                 };
             }
         },
@@ -25,7 +25,7 @@ module.exports = {
                 return {
                     statusText: "Resource Not Found",
                     statusCode: 404,
-                    message: {message: "Resource Not Found"}
+                    message: "Resource Not Found"
                 }
             }
         }

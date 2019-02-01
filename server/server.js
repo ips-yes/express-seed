@@ -7,7 +7,8 @@
         bodyParser = require('body-parser'),
         cookieParser = require('cookie-parser'),
         http = require('http'),
-        validate = require('express-validation');
+        validate = require('express-validation'),
+        UserController = require('./features/users/UserController');
 
     // Application imports
     let deployConfig = require('./config'),
@@ -108,6 +109,27 @@
     //  MIDDLEWARE ^^^^^                                                                             //
     //===============================================================================================//
 
+    //===============================================================================================//
+    //  SESSION CLEANUP TASK                                                                       //
+    //===============================================================================================//
+
+    let sessionCleanupTask = () => {
+        try {
+            UserController.ClearStaleSessions()
+              .then((result) => {
+                  logger.info(result + ' stale sessions have been removed');
+              })
+              .catch((err) => {
+                  logger.error("An error occurred during cleanup:\n" + (err.stack || err));
+              });
+        } catch (e) {
+            logger.error("An error occurred during cleanup:\n" + (e.stack || e));
+        }
+    };
+
+    //===============================================================================================//
+    //  SESSION CLEANUP TASK  ^^^^^                                                                     //
+    //===============================================================================================//
 
 
     //===============================================================================================//
@@ -121,6 +143,17 @@
                 resolve();
             });
         });
+        //clean up stale sessions
+        // Convert the number of days to millis and take the min of that and the max 32 bit signed integer.  setInterval caps at that value
+        let sessionCleanupIntervalTime = deployConfig.sessionLife.sessionCleanupFrequencyInDays * 1000*60*60*24;
+        if(sessionCleanupIntervalTime > 2147483647) {
+            sessionCleanupIntervalTime = 2147483647;
+            logger.error('The configuration for sessionCleanupFrequencyInDays is too large for setInterval, capping at: ' + sessionCleanupIntervalTime + " milliseconds");
+        }
+        logger.info('Starting session cleanup interval every ' + sessionCleanupIntervalTime + " milliseconds\n");
+        sessionCleanupTask();
+        setInterval(sessionCleanupTask, sessionCleanupIntervalTime);
+
     } catch(err) {
         logger.error('error occurred starting express: ' +
             '\n(' + err.toString() +
