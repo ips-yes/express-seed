@@ -6,21 +6,21 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "bcrypt": "^2.0.1",
+    "bcrypt": "2.0.1",
     "body-parser": "1.17.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "express-rate-limit": "^2.11.0",
-    "express-validation": "^1.0.2",
-    "joi": "^13.2.0",
+    "express-rate-limit": "2.11.0",
+    "express-validation": "1.0.2",
+    "joi": "13.2.0",
     "math": "0.0.3",
-    "moment": "^2.22.1",
+    "moment": "2.22.1",
     "passport": "0.4.0",
     "passport-local": "1.0.0",
-    "pg": "^7.4.1",
-    "request-ip": "^2.0.2",
-    "sequelize": "^4.37.6",
+    "pg": "7.4.1",
+    "request-ip": "2.0.2",
+    "sequelize": "4.37.6",
     "winston": "2.3.1"
   }
 }
