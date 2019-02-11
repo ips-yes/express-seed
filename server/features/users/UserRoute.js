@@ -3,12 +3,13 @@ let express = require('express'),
     router = express.Router(),
     passport = require('../../middleware/Auth').passport,
     authenticationMiddleware = require('../../middleware/Auth').authenticationMiddleware,
-    validate = require('express-validation'),
+    validator = require('express-joi-validator'),
     constants = require('../../utils/Constants'),
     logger = require('../../utils/Logger'),
     UserValidation = require('./UserValidation'),
     UserController = require('./UserController'),
-    AUTH_PARAMS = require('../../config').auth;
+    AUTH_PARAMS = require('../../config').auth,
+    joiOptions = require('../../config').joi;
 
 //===============================================================================================//
 //  ROUTES                                                                                       //
@@ -18,7 +19,7 @@ let express = require('express'),
  * This route will add a user.  IMPORTANT to create your first user remove the
  * authenticationMiddleware temporarily
  */
-router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
+router.post('/', authenticationMiddleware, validator(UserValidation.PostUser),
     (req, res, next)=> {
         logger.info('POST User');
         UserController.Add(req.body)
@@ -33,7 +34,7 @@ router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
 /**
  * This route will fetch a user by id
  */
-router.get('/:_id', authenticationMiddleware, validate(UserValidation.GetUser), (req, res, next) => {
+router.get('/:_id', authenticationMiddleware, validator(UserValidation.GetUser), (req, res, next) => {
     logger.info('GET User');
 
     UserController.GetById(req.params._id)
@@ -49,7 +50,7 @@ router.get('/:_id', authenticationMiddleware, validate(UserValidation.GetUser), 
  * This route will attempt to login the user with the given credentials
  */
 router.post('/login',
-    validate(UserValidation.Login),
+    validator(UserValidation.Login),
     passport.authenticate('local'),
     (req, res) => {
         logger.info('Login');

@@ -7,7 +7,6 @@
         bodyParser = require('body-parser'),
         cookieParser = require('cookie-parser'),
         http = require('http'),
-        validate = require('express-validation'),
         UserController = require('./features/users/UserController');
 
     // Application imports
@@ -18,14 +17,7 @@
 
     let DB_PARAMS = deployConfig.db;
 
-    // sets up express validator with options
-    // as of now these options do not allow parameters that are not specified in schema through
-    // For more options go to: https://www.npmjs.com/package/express-validation#global-options
-    validate.options({
-        allowUnknownBody: false,
-        allowUnknownQuery: false,
-        allowUnknownParams: false
-    });
+
 
     logger.info('****************************** Server Starting Up ******************************');
     //===============================================================================================//
