@@ -8,11 +8,12 @@
   "dependencies": {
     "bcrypt": "2.0.1",
     "body-parser": "1.17.2",
+    "boom": "7.3.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "express-joi-validator": "2.0.1",
     "express-rate-limit": "2.11.0",
+    "extend": "3.0.2",
     "joi": "13.2.0",
     "math": "0.0.3",
     "moment": "2.22.1",

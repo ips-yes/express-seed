@@ -89,7 +89,10 @@
     //General Exception Handler
     app.use((err, req, res, next) => {
         logger.warn(err.message);
-        if(err.statusCode){
+        if(err.output){
+            return res.status(err.output.statusCode).json(err.output.payload);
+        }
+        else if(err.statusCode){
             return res.status(err.statusCode).json(err);
         }else if(err.status){
             return res.status(err.status).json(err);

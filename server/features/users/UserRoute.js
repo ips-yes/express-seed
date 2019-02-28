@@ -3,7 +3,7 @@ let express = require('express'),
     router = express.Router(),
     passport = require('../../middleware/Auth').passport,
     authenticationMiddleware = require('../../middleware/Auth').authenticationMiddleware,
-    validator = require('express-joi-validator'),
+    validate = require('../../middleware/JoiValidator').validate,
     constants = require('../../utils/Constants'),
     logger = require('../../utils/Logger'),
     UserValidation = require('./UserValidation'),
@@ -19,7 +19,7 @@ let express = require('express'),
  * This route will add a user.  IMPORTANT to create your first user remove the
  * authenticationMiddleware temporarily
  */
-router.post('/', authenticationMiddleware, validator(UserValidation.PostUser),
+router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
     (req, res, next)=> {
         logger.info('POST User');
         UserController.Add(req.body)
@@ -34,7 +34,7 @@ router.post('/', authenticationMiddleware, validator(UserValidation.PostUser),
 /**
  * This route will fetch a user by id
  */
-router.get('/:_id', authenticationMiddleware, validator(UserValidation.GetUser), (req, res, next) => {
+router.get('/:_id', authenticationMiddleware, validate(UserValidation.GetUser), (req, res, next) => {
     logger.info('GET User');
 
     UserController.GetById(req.params._id)
@@ -50,7 +50,7 @@ router.get('/:_id', authenticationMiddleware, validator(UserValidation.GetUser),
  * This route will attempt to login the user with the given credentials
  */
 router.post('/login',
-    validator(UserValidation.Login),
+    validate(UserValidation.Login),
     passport.authenticate('local'),
     (req, res) => {
         logger.info('Login');
