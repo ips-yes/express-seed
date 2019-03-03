@@ -1,10 +1,10 @@
 /*Created by anthonyg 01-05-2018*/
-let Joi = require('joi'),
-    constants = require('../../utils/Constants');
+import * as Joi from 'joi';
+import constants from '../../utils/Constants'
 
 let PASSWORD_REGEX = /(?=^.{8,32}$)(?=(?:.*?\d){1})(?=.*[a-z])(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})(?!.*\s)[0-9a-zA-Z!@#$%^&*]*$/;
 
-module.exports={
+export default {
     PostUser:{
         body:{
             created_by: Joi.number(),

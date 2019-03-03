@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "npm run build && ts-node server.ts",
+    "build": "tsc -p ../tsconfig.json"
   },
   "dependencies": {
     "bcrypt": "2.0.1",
@@ -13,7 +14,6 @@
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-rate-limit": "2.11.0",
-    "extend": "3.0.2",
     "joi": "13.2.0",
     "math": "0.0.3",
     "moment": "2.22.1",
@@ -23,5 +23,34 @@
     "request-ip": "2.0.2",
     "sequelize": "4.37.6",
     "winston": "2.3.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/body-parser": "^1.17.0",
+    "@types/chai": "^4.1.7",
+    "@types/chai-http": "^3.0.5",
+    "@types/express": "github:types/npm-express",
+    "@types/joi": "^14.3.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.19",
+    "@types/passport-local": "^1.0.33",
+    "@types/request-ip": "0.0.33",
+    "@types/sequelize": "^4.27.34",
+    "@types/winston": "^2.4.4",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4",
+    "express-serve-static-core": "^0.1.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "ts-node": "^8.0.2",
+    "tsc": "^1.20150623.0",
+    "tslint": "^5.12.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3333"
   }
 }

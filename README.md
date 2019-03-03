@@ -26,6 +26,13 @@ An architecturally sound starting point for a RESTful service utilizing expressj
 - **passport:** authentication and authorization middleware
 - **winston:** Logging framework
 
+
+## Running
+- Start up the server by running the command 
+```
+npm start
+```
+
 ## Class Organization
 - **Route:** An initial entry to the web service corresponding to HTTP methods (POST, GET, PUT, etc.). The route listens for incoming request and routes them to the lower layers.
 

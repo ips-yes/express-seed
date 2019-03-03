@@ -1,23 +1,23 @@
 'use strict';
+
+// Library imports
+import * as express from 'express'
+import * as rateLimit from 'express-rate-limit'
+import * as bodyParser from'body-parser'
+import * as cookieParser from 'cookie-parser'
+import * as http from 'http'
+import UserController from './features/users/UserController'
+
+// Application imports
+import { config } from './config'
+import models from './models/Index'
+import {passport} from './middleware/Auth'
+import logger from './utils/Logger'
+
+const DB_PARAMS = config.db;
+const app = express();
+
 (async () => {
-    // Library imports
-    let express = require('express'),
-        rateLimit = require('express-rate-limit'),
-        app = express(),
-        bodyParser = require('body-parser'),
-        cookieParser = require('cookie-parser'),
-        http = require('http'),
-        UserController = require('./features/users/UserController');
-
-    // Application imports
-    let deployConfig = require('./config'),
-        models = require('./models/Index'),
-        passport = require('./middleware/Auth').passport,
-        logger = require('./utils/Logger.js');
-
-    let DB_PARAMS = deployConfig.db;
-
-
 
     logger.info('****************************** Server Starting Up ******************************');
     //===============================================================================================//
@@ -49,7 +49,7 @@
     //===============================================================================================//
     //  MIDDLEWARE                                                                                   //
     //===============================================================================================//
-    let LIMITER_PARAMS = deployConfig.limiter;
+    const LIMITER_PARAMS = config.limiter;
 
     //rate limit for throttling requests for IP addresses.
     if (LIMITER_PARAMS.enable) {
@@ -84,7 +84,7 @@
     }));
     app.use(cookieParser());
     app.use(bodyParser.urlencoded({extended: true}));
-    app.use(deployConfig.app.PATH, require('./routes'));
+    app.use(config.app.PATH, require('./routes'));
 
     //General Exception Handler
     app.use((err, req, res, next) => {
@@ -133,14 +133,14 @@
     // start the server
     try {
         await new Promise(function (resolve) {
-            http.createServer(app).listen(deployConfig.app.PORT, () => {
-                logger.info('****************************** Server Listening on Port:' + deployConfig.app.PORT + ' ******************************');
+            http.createServer(app).listen(config.app.PORT, () => {
+                logger.info('****************************** Server Listening on Port:' + config.app.PORT + ' ******************************');
                 resolve();
             });
         });
         //clean up stale sessions
         // Convert the number of days to millis and take the min of that and the max 32 bit signed integer.  setInterval caps at that value
-        let sessionCleanupIntervalTime = deployConfig.sessionLife.sessionCleanupFrequencyInDays * 1000*60*60*24;
+        let sessionCleanupIntervalTime = config.sessionLife.sessionCleanupFrequencyInDays * 1000*60*60*24;
         if(sessionCleanupIntervalTime > 2147483647) {
             sessionCleanupIntervalTime = 2147483647;
             logger.error('The configuration for sessionCleanupFrequencyInDays is too large for setInterval, capping at: ' + sessionCleanupIntervalTime + " milliseconds");
