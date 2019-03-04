@@ -1,6 +1,8 @@
 //-------------------------------------------//
 //setup logger
 //-------------------------------------------//
+import ILogger from "./ILogger";
+
 let winston = require('winston');
 
 let logLevels =
@@ -25,7 +27,7 @@ let logLevels =
 	}
 };
 
-let logger = new (winston.Logger)
+let logger: ILogger = new (winston.Logger)
 ({
 	levels           : logLevels.levels,
 	level            : 'info',				//the default level
@@ -55,4 +57,4 @@ let logger = new (winston.Logger)
 winston.addColors(logLevels.colors);
 
 //------------------------------------------//
-module.exports = logger;
+export default logger;

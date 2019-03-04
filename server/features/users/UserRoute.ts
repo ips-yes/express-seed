@@ -1,15 +1,16 @@
 /*Created by anthonyg 01-05-2018*/
-let express = require('express'),
-    router = express.Router(),
-    passport = require('../../middleware/Auth').passport,
-    authenticationMiddleware = require('../../middleware/Auth').authenticationMiddleware,
-    validate = require('../../middleware/JoiValidator').validate,
-    constants = require('../../utils/Constants'),
-    logger = require('../../utils/Logger'),
-    UserValidation = require('./UserValidation'),
-    UserController = require('./UserController'),
-    AUTH_PARAMS = require('../../config').auth,
-    joiOptions = require('../../config').joi;
+import * as express from 'express';
+const router = express.Router();
+import {passport} from '../../middleware/Auth';
+import {validate} from '../../middleware/JoiValidator'
+import constants from'../../utils/Constants';
+import UserValidation from './UserValidation'
+import logger from '../../utils/Logger';
+import { authenticationMiddleware } from "../../middleware/Auth";
+import UserController from "./UserController"
+import {config} from "../../config";
+
+const AUTH_PARAMS = config.auth;
 
 //===============================================================================================//
 //  ROUTES                                                                                       //

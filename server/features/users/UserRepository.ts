@@ -1,38 +1,40 @@
-let models = require('../../models/Index'),
-  logger = require('../../utils/Logger'),
-  constants = require('../../utils/Constants'),
-  sequelize = require('../../models/Index').sequelize;
+import models from '../../models/Index';
+import logger from '../../utils/Logger';
+import constants from '../../utils/Constants';
+import IRepoError from "./IRepoError";
+import ISession from "../session/ISession";
+import IUser from "./IUser";
+import IHTTPResponse from "../../utils/IHTTPResponse";
 
 
 ////////////////////
 //// INTERNALS /////
 ////////////////////
-
+const sequelize = models.sequelize;
 const Op = sequelize.Op;
 
-let repoErr = {
+const repoErr: IRepoError = {
     location: 'UserRepository.js',
     statusCode: 500
 };
 
-let standardError = (message) => {
+const standardError = (message: string) => {
     repoErr.message = message;
     logger.warn(repoErr);
 };
 
-let self = module.exports = {
+export default class UserRepository {
 
-
-    async Add(user) {
+    public static async Add(user): Promise<IUser> {
         try {
             return await models.users.create(user);
         } catch (err) {
             standardError(err.name + ' ' + err.message);
-            return repoErr;
+            throw repoErr;
         }
-    },
+    }
 
-    async GetById(_id) {
+    public static async GetById(_id: number): Promise<IUser> {
         try {
             return await models.users.find({
                 where: {_id: _id},
@@ -45,7 +47,7 @@ let self = module.exports = {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
-    },
+    }
 
     async Update(user) {
         try {
@@ -64,10 +66,9 @@ let self = module.exports = {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
+    }
 
-    },
-
-    async Login(email) {
+    public static async Login(email: string): Promise<IUser> {
         try {
             let users = await models.users.findAll({
                 where: {
@@ -92,9 +93,9 @@ let self = module.exports = {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
-    },
+    }
 
-    async GetSession(uuid) {
+    public static async GetSession(uuid: string): Promise<ISession> {
         try {
             return await models.sessions.find({
                 where: {
@@ -107,9 +108,9 @@ let self = module.exports = {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
-    },
+    }
 
-    async UpdateSession(session) {
+    public static async UpdateSession(session): Promise<ISession> {
         try {
             let affectedRows = await models.sessions.update(session, {
                 where: {
@@ -120,7 +121,7 @@ let self = module.exports = {
             if (affectedRows[0] > 0) {
                 return Promise.resolve(affectedRows[0]);
             } else {
-                repoErr = constants.HTTP.ERROR.NOT_FOUND;
+                const repoErr: IHTTPResponse = constants.HTTP.ERROR.NOT_FOUND;
                 logger.warn(repoErr);
                 return Promise.reject(repoErr);
             }
@@ -128,23 +129,22 @@ let self = module.exports = {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
-    },
+    }
 
-    async NewSession(session) {
+    public static async NewSession(session: ISession): Promise<ISession> {
         try {
             return await models.sessions.create(session)
         } catch (err) {
             standardError(err.message);
             return Promise.reject(repoErr);
         }
-
-    },
+    }
 
     /***
      * Deletes all sessions that are inactive active a given number of milliseconds
      * @param cutoffDate is the date object for the latest date to keep results
      */
-    async ClearStaleSessions(cutoffDate) {
+    public static async ClearStaleSessions(cutoffDate: Date): Promise<any[]> {
         try {
             let result = models.sessions.destroy({
                 where: {

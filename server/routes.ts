@@ -1,6 +1,6 @@
 /*Created by anthonyg 01-05-2018*/
-let express = require('express');
-let router = express.Router();
+import * as express from 'express';
+const router = express.Router();
 
 //===============================================================================================//
 //  ROUTES                                                                                       //

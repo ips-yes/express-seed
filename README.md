@@ -26,12 +26,19 @@ An architecturally sound starting point for a RESTful service utilizing expressj
 - **passport:** authentication and authorization middleware
 - **winston:** Logging framework
 
+
+## Running
+- Start up the server by running the command 
+```
+npm start
+```
+
 ## Class Organization
 - **Route:** An initial entry to the web service corresponding to HTTP methods (POST, GET, PUT, etc.). The route listens for incoming request and routes them to the lower layers.
 
 - **Controller:** Contains business logic to be performed to fulfill the given requests.  An example might be calling various database tables and aggregating their data to be returned to the client.
 
-- **Repository:** The sole purpose it’s to communicate with the database.
+- **Repository:** The sole purpose is to communicate with the database.
 
 - **Validation:** JOI json schema for validation of request parameters
 

@@ -1,19 +1,24 @@
 /**
  * Created by anthonyg on 5/1/2018
  */
-let passport = require('passport'),
-  moment = require('moment'),
-  LocalStrategy = require('passport-local').Strategy,
-  requestIp = require('request-ip'),
-  crypto = require('crypto'),
-  EncryptionHelper = require('../utils/EncryptionHelper'),
-  logger = require('../utils/Logger'),
-  constants = require('../utils/Constants'),
-  AUTH_PARAMS = require('../config').auth,
-  User = require('../features/users/UserRepository');
+import * as Passport from 'passport'
+import * as  moment from 'moment'
+import {Strategy as LocalStrategy} from 'passport-local'
+import {getClientIp} from "request-ip"
+import {randomBytes} from "crypto"
+import {ComparePassword} from "../utils/EncryptionHelper"
+import logger from '../utils/Logger'
+import constants from '../utils/Constants'
+import {config} from '../config'
+import UserRepository from '../features/users/UserRepository'
+import ISession from "../features/session/ISession";
+import IUser from "../features/users/IUser";
+import IHTTPResponse from "../utils/IHTTPResponse";
 
+const AUTH_PARAMS = config.auth;
+export const passport = Passport;
 
-let authenticationMiddleware = async (req, res, next) => {
+export const authenticationMiddleware = async (req, res, next) => {
     if (!req.cookies || !req.cookies.sessionId) {
         let response = constants.AUTH.SESSION_MISSING;
         logger.warn(response);
@@ -44,9 +49,9 @@ let authenticationMiddleware = async (req, res, next) => {
 };
 
 
-let validateSession = async (uuid) => {
+const validateSession = async (uuid: string): Promise<ISession> => {
     try{
-        let session = await User.GetSession(uuid);
+        const session: ISession = await UserRepository.GetSession(uuid);
         if (!session) {
             let response = constants.AUTH.SESSION_FAIL;
             logger.warn(response);
@@ -63,7 +68,7 @@ let validateSession = async (uuid) => {
                     expired: true
                 };
 
-                let result = await User.UpdateSession(updateSession);
+                const result: ISession = await UserRepository.UpdateSession(updateSession);
                 if (result) {
                     let response = constants.AUTH.SESSION_EXPIRED;
                     logger.warn(response);
@@ -83,18 +88,18 @@ let validateSession = async (uuid) => {
 };
 
 
-passport.serializeUser(async (user, done) => {
+passport.serializeUser(async (user: IUser, done) => {
     let expiration = new Date();
     expiration.setHours(expiration.getHours() + AUTH_PARAMS.cookieLife);
-    let session = {
-        uuid: crypto.randomBytes(32).toString('hex'),
+    let session: ISession = {
+        uuid: randomBytes(32).toString('hex'),
         user_id: user._id,
         expired: false,
         active: true,
         expires_at: expiration
     };
     try{
-        await User.NewSession(session);
+        await UserRepository.NewSession(session);
         session.user_type = user.user_type.value;
         return done(null, session);
     }catch(err){
@@ -102,9 +107,9 @@ passport.serializeUser(async (user, done) => {
     }
 });
 
-passport.deserializeUser( async (id, done) => {
+passport.deserializeUser( async (id: number, done) => {
     try{
-        let user = User.GetById(id);
+        const user: IUser = await UserRepository.GetById(id);
         return done(null, user);
     }catch(err){
         return done(err);
@@ -112,25 +117,24 @@ passport.deserializeUser( async (id, done) => {
 });
 
 
-passport.use(new LocalStrategy({passReqToCallback: true, failWithError: true}, async (req, username, password, done) => {
-      let ip = requestIp.getClientIp(req);
-      try{
-          let user = await User.Login(username);
-          let result = await EncryptionHelper.ComparePassword(password, user.password);
-
-          if (!result) {
-              let err = constants.AUTH.PASSWORD_FAIL;
-              err._ip = ip;
-              logger.warn(err);
-              return done(err);
-          } else {
-              return done(null, user);
-          }
-      } catch(err){
-          done(err);
-      }
+passport.use(new LocalStrategy({passReqToCallback: true}, (req, username, password, done) => {
+      const ip: string = getClientIp(req);
+      UserRepository.Login(username)
+          .then((user: IUser) => {
+              ComparePassword(password, user.password)
+                  .then((result?: any) => {
+                      if (!result) {
+                          let err: IHTTPResponse = constants.AUTH.PASSWORD_FAIL;
+                          err._ip = ip;
+                          logger.warn(err);
+                          return done(err);
+                      } else {
+                          return done(null, user);
+                      }
+                  })
+          }).catch((err) => {
+              done(err);
+          });
   }
 ));
 
-exports.passport = passport;
-exports.authenticationMiddleware = authenticationMiddleware;
