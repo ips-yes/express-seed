@@ -38,7 +38,7 @@ npm start
 
 - **Controller:** Contains business logic to be performed to fulfill the given requests.  An example might be calling various database tables and aggregating their data to be returned to the client.
 
-- **Repository:** The sole purpose it’s to communicate with the database.
+- **Repository:** The sole purpose is to communicate with the database.
 
 - **Validation:** JOI json schema for validation of request parameters
 
