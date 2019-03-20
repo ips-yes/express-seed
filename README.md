@@ -1,4 +1,3 @@
-<img src="https://intelligentproduct.solutions/wp-content/uploads/2017/01/logo_new_web1.png" height="60" width="124"/>
 
 # express-seed
 
