@@ -25,10 +25,10 @@ let authenticationMiddleware = async (req, res, next) => {
         //Successful, add the user id to the session
         if (!req.session) {
             req.session = {
-                user_id: session.user_id
+                userId: session.userId
             }
         } else {
-            req.session.user_id = session.user_id;
+            req.session.userId = session.userId;
         }
         return next();
 
@@ -53,7 +53,7 @@ let validateSession = async (uuid) => {
             return Promise.reject(response);
         } else {
             let timeNow = moment();
-            let timeThen = moment(session.expires_at);
+            let timeThen = moment(session.expiresAt);
             let hoursDiff = moment.duration(timeNow.diff(timeThen)).asHours();
             if (hoursDiff > AUTH_PARAMS.cookieLife) {
                 //Set the session expired and inactive
@@ -88,14 +88,14 @@ passport.serializeUser(async (user, done) => {
     expiration.setHours(expiration.getHours() + AUTH_PARAMS.cookieLife);
     let session = {
         uuid: crypto.randomBytes(32).toString('hex'),
-        user_id: user._id,
+        userId: user.id,
         expired: false,
         active: true,
         expires_at: expiration
     };
     try{
         await User.NewSession(session);
-        session.user_type = user.user_type.value;
+        session.userType = user.userType.value;
         return done(null, session);
     }catch(err){
         return done(err, null);

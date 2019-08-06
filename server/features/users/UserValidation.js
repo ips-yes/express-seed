@@ -7,10 +7,10 @@ let PASSWORD_REGEX = /(?=^.{8,32}$)(?=(?:.*?\d){1})(?=.*[a-z])(?=(?:.*?[!@#$%*()
 module.exports={
     PostUser:{
         body:{
-            created_by: Joi.number(),
+            createdBy: Joi.number(),
             email: Joi.string().lowercase().email().required(),
-            first_name: Joi.string(),
-            last_name: Joi.string(),
+            firstName: Joi.string(),
+            lastName: Joi.string(),
             // password requirements
             // 8 characters
             // One Upper Case
@@ -19,13 +19,13 @@ module.exports={
             // One Special character
             password: Joi.string()
                 .regex(PASSWORD_REGEX).required(),
-            user_type_id: Joi.number().required()
+            userTypeId: Joi.number().required()
         }
     },
 
     GetUser:{
         params:{
-            _id: Joi.number().required()
+            id: Joi.number().required()
         }
     },
 

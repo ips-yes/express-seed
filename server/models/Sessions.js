@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes)=>{
           allowNull: false,
           primaryKey: true
       },
-      expires_at: {
+      expiresAt: {
           type: DataTypes.DATE,
           allowNull: true
       },
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes)=>{
           type: DataTypes.BOOLEAN,
           allowNull: true
       },
-      user_id: {
+      userId: {
           type: DataTypes.INTEGER,
           allowNull: true
       }
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes)=>{
   });
     Session.associate = models=>{
         Session.belongsTo(models.users,{
-            foreignKey: 'user_id'
+            foreignKey: 'userId'
         })
     };
     return Session;

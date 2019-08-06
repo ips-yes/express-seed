@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 module.exports = (sequelize, DataTypes)=>{
-  const UserType = sequelize.define('user_types', {
-      _id: {
+  const UserType = sequelize.define('userTypes', {
+      id: {
           type: DataTypes.INTEGER,
           allowNull: false,
           primaryKey: true,
@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes)=>{
           allowNull: false,
           defaultValue: false
       },
-      created_by: {
+      createdBy: {
           type: DataTypes.INTEGER,
           allowNull: true
       },
-      edited_by: {
+      editedBy: {
           type: DataTypes.INTEGER,
           allowNull: true
       },
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes)=>{
       }
   },
       {
-          tableName: 'user_types'
+          tableName: 'userTypes'
       });
 
   UserType.associate = models=>{

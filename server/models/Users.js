@@ -6,15 +6,15 @@ module.exports = (sequelize, DataTypes)=>{
                 allowNull: false,
                 defaultValue: false
             },
-            created_by: {
+            createdBy: {
                 type: DataTypes.INTEGER,
                 allowNull: true
             },
-            edited_by: {
+            editedBy: {
                 type: DataTypes.INTEGER,
                 allowNull: true
             },
-            _id: {
+            id: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 primaryKey: true,
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes)=>{
                 type: DataTypes.TEXT,
                 allowNull: true
             },
-            first_name: {
+            firstName: {
                 type: DataTypes.TEXT,
                 allowNull: true
             },
-            last_name: {
+            lastName: {
                 type: DataTypes.TEXT,
                 allowNull: true
             },
@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes)=>{
                 type: DataTypes.TEXT,
                 allowNull: true
             },
-            user_type_id: {
+            userTypeId: {
                 type: DataTypes.INTEGER,
                 allowNull: true
             },
-            phone_number:{
+            phoneNumber:{
                 type: DataTypes.TEXT,
                 allowNull: true
             }
@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes)=>{
         });
 
     User.associate = models=>{
-        User.belongsTo(models.user_types,{
-            foreignKey: 'user_type_id'
+        User.belongsTo(models.userTypes,{
+            foreignKey: 'userTypeId',
         })
     };
         return User;

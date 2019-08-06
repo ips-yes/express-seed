@@ -1,7 +1,8 @@
 let models = require('../../models/Index'),
-  logger = require('../../utils/Logger'),
-  constants = require('../../utils/Constants'),
-  sequelize = require('../../models/Index').sequelize;
+    logger = require('../../utils/Logger'),
+    constants = require('../../utils/Constants'),
+    sequelize = require('../../models/Index').sequelize,
+    Sequelize = require('sequelize');
 
 
 ////////////////////
@@ -32,13 +33,13 @@ let self = module.exports = {
         }
     },
 
-    async GetById(_id) {
+    async GetById(id) {
         try {
-            return await models.users.find({
-                where: {_id: _id},
+            return await models.users.findOne({
+                where: {id: id},
                 attributes: {exclude: ['password']},
                 include: [
-                    {model: models.user_types, attributes: ['value']}
+                    {model: models.userTypes, attributes: ['value']}
                 ]
             })
         } catch (err) {
@@ -51,7 +52,7 @@ let self = module.exports = {
         try {
             let affectedRows = await models.users.update(user,
               {
-                  where: {_id: user._id}
+                  where: {id: user.id}
               });
 
             if (affectedRows[0] > 0) {
@@ -71,13 +72,13 @@ let self = module.exports = {
         try {
             let users = await models.users.findAll({
                 where: {
-                    [Op.and]: [{
+                    [Sequelize.Op.and]: [{
                         deleted: false
                     },
                         sequelize.where(sequelize.fn('lower', sequelize.col('email')), sequelize.fn('lower', email))]
                 },
                 include: [
-                    {model: models.user_types, attributes: ['value']}
+                    {model: models.userTypes, attributes: ['value']}
                 ]
             });
 
@@ -96,7 +97,7 @@ let self = module.exports = {
 
     async GetSession(uuid) {
         try {
-            return await models.sessions.find({
+            return await models.sessions.findOne({
                 where: {
                     uuid: uuid,
                     active: true,
@@ -148,8 +149,8 @@ let self = module.exports = {
         try {
             let result = models.sessions.destroy({
                 where: {
-                    expires_at: {
-                        [Op.lt]: cutoffDate
+                    expiresAt: {
+                        [Sequelize.Op.lt]: cutoffDate
                     }
                 }
             });

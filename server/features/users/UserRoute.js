@@ -34,10 +34,10 @@ router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
 /**
  * This route will fetch a user by id
  */
-router.get('/:_id', authenticationMiddleware, validate(UserValidation.GetUser), (req, res, next) => {
+router.get('/:id', authenticationMiddleware, validate(UserValidation.GetUser), (req, res, next) => {
     logger.info('GET User');
 
-    UserController.GetById(req.params._id)
+    UserController.GetById(req.params.id)
         .then(user => {
             return res.status(200).json(user);
         })

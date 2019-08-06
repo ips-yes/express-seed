@@ -40,6 +40,13 @@
         await models.sequelize.authenticate();
         if(DB_PARAMS.SYNC){
             await models.sequelize.sync(); //If this is enabled in config.json it will sync the DB to the code
+            //Create default user types if there are none
+            let userTypes = await models.userTypes.findAll({});
+            if (userTypes.length == 0) {
+                await models.userTypes.create({ value: 'Admin' });
+                await models.userTypes.create({ value: 'User' });
+            }
+            
         }
     } catch(e) {
         logger.error('Database configuration failed due to: ' + e.message);
