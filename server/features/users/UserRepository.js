@@ -26,7 +26,7 @@ let self = module.exports = {
 
     async Add(user) {
         try {
-          return await models.users.create({ garbage: 'stuff' });
+          return await models.users.create(user);
         } catch (err) {
             standardError(err.name + ' ' + err.message);
             throw repoErr;
