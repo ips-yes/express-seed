@@ -20,7 +20,7 @@ let self = module.exports = {
             user.password = await EncryptionHelper.HashPassword(user.password);
             user = await User.Add(user);
             let response = constants.HTTP.SUCCESS.CREATED;
-            response._id = user._id;
+            response.id = user.id;
             return response;
         } catch (err) {
             return Promise.reject(err);
@@ -29,13 +29,13 @@ let self = module.exports = {
     },
 
     /**
-     * This function will fetch the user with the given _id
-     * @param _id The id of the user to fetch
+     * This function will fetch the user with the given id
+     * @param id The id of the user to fetch
      * @returns JSON user
      */
-    async GetById(_id) {
+    async GetById(id) {
         try {
-            let user = await User.GetById(_id);
+            let user = await User.GetById(id);
             if (!user) {
                 let response = constants.HTTP.ERROR.NOT_FOUND;
                 return Promise.reject(response);

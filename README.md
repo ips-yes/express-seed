@@ -51,6 +51,7 @@ Project favores the division of classes by feature instead of by class type. Con
 
 
 ### Sample Routes
+**The base path can be found in the config/dev.json**
 
 **POST /users/**
 
@@ -59,7 +60,7 @@ This route will create a user. Note that when creating the first user you'll nee
 **required body params**
 - email : string
 - password : string 8 characters, One Uppercase, One Lowercase, One number, One special char
-- user_type_id : int
+- userTypeId : int
 
 **POST /users/login**
 
