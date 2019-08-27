@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes)=>{
             },
             email: {
                 type: DataTypes.TEXT,
-                allowNull: true
+                allowNull: false
             },
             firstName: {
                 type: DataTypes.TEXT,
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes)=>{
             },
             password: {
                 type: DataTypes.TEXT,
-                allowNull: true
+                allowNull: false
             },
             userTypeId: {
                 type: DataTypes.INTEGER,

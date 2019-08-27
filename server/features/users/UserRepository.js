@@ -26,10 +26,10 @@ let self = module.exports = {
 
     async Add(user) {
         try {
-            return await models.users.create(user);
+          return await models.users.create({ garbage: 'stuff' });
         } catch (err) {
             standardError(err.name + ' ' + err.message);
-            return repoErr;
+            throw repoErr;
         }
     },
 
@@ -44,7 +44,7 @@ let self = module.exports = {
             })
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+          throw repoErr;
         }
     },
 
@@ -63,7 +63,7 @@ let self = module.exports = {
             }
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+          throw repoError;
         }
 
     },
@@ -91,7 +91,8 @@ let self = module.exports = {
 
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+          throw repoError;
+
         }
     },
 
@@ -106,7 +107,7 @@ let self = module.exports = {
             })
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+            throw repoError;
         }
     },
 
@@ -127,7 +128,7 @@ let self = module.exports = {
             }
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+            throw repoError;
         }
     },
 
@@ -136,7 +137,7 @@ let self = module.exports = {
             return await models.sessions.create(session)
         } catch (err) {
             standardError(err.message);
-            return Promise.reject(repoErr);
+            throw repoError;
         }
 
     },
@@ -159,7 +160,7 @@ let self = module.exports = {
 
         } catch (err) {
             standardError(err);
-            return Promise.reject(repoErr);
+            throw repoError;
         }
     }
 

@@ -8,3 +8,4 @@ server/.elasticbeanstalk/config.yml
 obj/Debug/express-seed.njsproj.FileListAbsolute.txt
 express-seed.njsproj
 logfile.txt
+*.sln

@@ -10,7 +10,7 @@ let Sequelize = require('sequelize'),
 let sequelize = new Sequelize(DB_PARAMS.NAME, DB_PARAMS.USER, DB_PARAMS.PASSWORD, {
     host: DB_PARAMS.HOST,
     dialect: 'postgres',
-    logging: true,
+    logging: false,
     define: {
         timestamps: true,
     },
