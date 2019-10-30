@@ -21,7 +21,7 @@
     "passport-local": "1.0.0",
     "pg": "7.4.1",
     "request-ip": "2.0.2",
-    "sequelize": "~5.12.3",
+    "sequelize": "~5.15.1",
     "winston": "2.3.1"
   }
 }
