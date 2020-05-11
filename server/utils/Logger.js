@@ -25,11 +25,8 @@ let logLevels =
 	}
 };
 
-let logger = new (winston.Logger)
+let logger = winston.createLogger
 ({
-	levels           : logLevels.levels,
-	level            : 'info',				//the default level
-	handleExceptions : true,
 	transports :
 	[
 		new (winston.transports.Console)
