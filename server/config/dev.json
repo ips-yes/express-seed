@@ -27,8 +27,8 @@
     "HOST": "localhost",
     "NAME": "express_seed",
     "USER": "postgres",
-    "PASSWORD": "admin",
-    "SYNC": false
+    "PASSWORD": "piccolo",
+    "SYNC": true
   },
   "sessionLife": {
     "staleSessionTimeToLiveInDays": 31,

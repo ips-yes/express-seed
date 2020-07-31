@@ -47,6 +47,21 @@ router.get('/:id', authenticationMiddleware, validate(UserValidation.GetUser), (
 });
 
 /**
+ * This route will fetch all users
+ */
+router.get('/', authenticationMiddleware, (req, res, next)=>{
+    UserController.GetAllUsers()
+        .then(users=>{
+            return res.status(200).json(users);
+        })
+        .catch(err=>{
+            return next(err);
+        })
+});
+
+
+
+/**
  * This route will attempt to login the user with the given credentials
  */
 router.post('/login',

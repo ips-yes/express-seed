@@ -48,6 +48,20 @@ let self = module.exports = {
         }
     },
 
+    async GetAllUsers(){
+        try{
+            let users = User.GetUsers();
+            if(!users){
+                let response = constants.HTTP.ERROR.NOT_FOUND;
+            }
+            else{
+                return users;
+            }
+        }catch(err){
+            return Promise.reject(err);
+        }
+    },
+
     /***
      * using the value from the config for stale session life, it will call the repository to delete old inactive sessions
      * @returns {Promise} with the result or error

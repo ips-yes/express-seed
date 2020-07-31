@@ -48,6 +48,22 @@ let self = module.exports = {
         }
     },
 
+    async GetUsers(){
+        try{
+            return await models.users.findAll({
+                attributes: {exclude: ['password']},
+                include:[
+                    {
+                        model: models.userTypes, attributes: ['value']
+                    }
+                ]
+            })
+        }catch(err){
+            standardError(err.message);
+            throw repoErr;
+        }
+    },
+
     async Update(user) {
         try {
             let affectedRows = await models.users.update(user,
