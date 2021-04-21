@@ -120,7 +120,6 @@ passport.use(new LocalStrategy({passReqToCallback: true, failWithError: true}, a
 
           if (!result) {
               let err = constants.AUTH.PASSWORD_FAIL;
-              err._ip = ip;
               logger.warn(err);
               return done(err);
           } else {
