@@ -1,4 +1,3 @@
-<img src="https://intelligentproduct.solutions/wp-content/uploads/2017/01/logo_new_web1.png" height="60" width="124"/>
 
 # express-seed
 
@@ -26,13 +25,6 @@ An architecturally sound starting point for a RESTful service utilizing expressj
 - **passport:** authentication and authorization middleware
 - **winston:** Logging framework
 
-
-## Running
-- Start up the server by running the command 
-```
-npm start
-```
-
 ## Class Organization
 - **Route:** An initial entry to the web service corresponding to HTTP methods (POST, GET, PUT, etc.). The route listens for incoming request and routes them to the lower layers.
 
@@ -59,22 +51,23 @@ Project favores the division of classes by feature instead of by class type. Con
 
 
 ### Sample Routes
+**The base path can be found in the config/dev.json**
 
 **POST /users/**
 
 This route will create a user. Note that when creating the first user you'll need to remove the authentication middleware temporarily
 
 **required body params**
-- email : string
-- password : string 8 characters, One Uppercase, One Lowercase, One number, One special char
-- user_type_id : int
+- email: string
+- password: string 8 characters, One Uppercase, One Lowercase, One number, One special char
+- userTypeId: int
 
 **POST /users/login**
 
 This route will attempt to login the given user. It will return a session token which must then be provided for authorization on requests
 
 **required body params**
-- email : string
+- username: string
 - password: string
 
 **GET /users/<id>**
@@ -82,5 +75,5 @@ This route will attempt to login the given user. It will return a session token 
 This route will get the user with the associated ID.
 
 **required query params**
-- id : int
+- id: int
 
