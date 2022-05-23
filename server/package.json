@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx ts-node index.ts",
     "lint": "eslint ./src --ext \".ts,.tsx\" && stylelint \"./src/**/*.css\"",
-    "build": "rm -rf build/ && npx tsc && cd ../frontend && yarn build && cd ../backend && node build/index.js",
+    "build": "rm -rf build/ && npx tsc && node build/index.js",
     "test": "jest -c ./jest.unit.json --detectOpenHandles",
     "test:coverage": "jest --coverage -c ./jest.unit.json --detectOpenHandles"
   },
@@ -41,7 +41,7 @@
     "@types/express-fileupload": "^1.1.6",
     "@types/express-rate-limit": "^5.1.1",
     "@types/express-session": "1.17.3",
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.5.1",
     "@types/moment": "^2.13.0",
     "@types/node": "^15.0.2",
     "@types/passport": "1.0.6",

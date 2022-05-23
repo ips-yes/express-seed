@@ -3,7 +3,7 @@ import moment from 'moment';
 import UserRepository from './UserRepository';
 import { HashPassword } from '../../utils/EncryptionHelper';
 import constants from '../../utils/Constants';
-import { config } from '../../config';
+import config from '../../config';
 import IHTTPResponse from '../../utils/IHTTPResponse';
 import IUser from './IUser';
 
@@ -17,9 +17,10 @@ export default class UserController {
      * @constructor
      */
   public static async Add(user: IUser): Promise<IHTTPResponse> {
+    let _user = { ...user };
     try {
-      user.password = await HashPassword(user.password);
-      user = await UserRepository.Add(user);
+      _user.password = await HashPassword(user.password);
+      _user = await UserRepository.Add(user);
       return {
         ...constants.HTTP.SUCCESS.CREATED,
         id: user.id,

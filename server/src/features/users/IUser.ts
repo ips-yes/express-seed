@@ -1,6 +1,6 @@
 // Defines the interface for a user model
 
-export default interface IUser {
+interface IUser {
     id?: number;
     deleted?: boolean
     createdBy?: number
@@ -10,4 +10,6 @@ export default interface IUser {
     lastName?: string
     password?: string
     UserType?: {value: any}
-};
+}
+
+export default IUser;

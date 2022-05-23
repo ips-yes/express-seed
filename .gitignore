@@ -1,7 +1,19 @@
+# Enviroment file (secrets)
+server/.env
+
+# NPM/Yarn packages
 /server/node_modules
-server/logfile.txt
+
+# Log files
+/server/logfile.txt
+
+# IDE files
 .idea
 express-seed.iml
-
-server/.env
 server/.elasticbeanstalk/config.yml
+obj/Debug/express-seed.njsproj.FileListAbsolute.txt
+express-seed.njsproj
+*.sln
+
+# Build directory
+server/build

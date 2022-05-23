@@ -26,6 +26,7 @@ export = (sequelize: any, DataTypes: any) => {
 
        editedBy: Number;
 
+       // eslint-disable-next-line no-unused-vars
        static associate(models: any) {
          // ...
        }

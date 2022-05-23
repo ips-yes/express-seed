@@ -48,7 +48,7 @@ export default class UserRepository {
     }
   }
 
-  async Update(user) {
+  public static async Update(user) {
     try {
       const affectedRows = await db.User.update(user,
         {
@@ -117,11 +117,11 @@ export default class UserRepository {
       if (affectedRows[0] > 0) {
         return Promise.resolve(affectedRows[0]);
       }
-      const repoErr: IHTTPResponse = constants.HTTP.ERROR.NOT_FOUND;
-      logger.warn(repoErr);
-      return Promise.reject(repoErr);
+      const error: IHTTPResponse = constants.HTTP.ERROR.NOT_FOUND;
+      logger.warn(error);
+      return Promise.reject(error);
     } catch (err) {
-      standardError(err.message);
+      standardError(`${err.name} ${err.message}`);
       return Promise.reject(repoErr);
     }
   }

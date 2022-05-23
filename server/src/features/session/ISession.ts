@@ -1,10 +1,12 @@
 // Defines the interface for a session model
 
-export default interface ISession {
+interface ISession {
     uuid: string
     expiresAt?: Date
     active?: boolean
     expired?: boolean
     userId?: number
     UserType?: {value: any}
-};
+}
+
+export default ISession;

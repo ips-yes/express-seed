@@ -1,13 +1,13 @@
 /* Created by anthonyg 01-05-2018 */
 import * as express from 'express';
 import passport from 'passport';
-import { validate } from '../../middleware/JoiValidator';
+import validate from '../../middleware/JoiValidator';
 import constants from '../../utils/Constants';
 import UserValidation from './UserValidation';
 import logger from '../../utils/Logger';
-import { authenticationMiddleware } from '../../middleware/Auth';
+import authenticationMiddleware from '../../middleware/Auth';
 import UserController from './UserController';
-import { config } from '../../config';
+import config from '../../config';
 
 const router = express.Router();
 

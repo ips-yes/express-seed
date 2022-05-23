@@ -5,9 +5,9 @@ interface IOptions {
     abortEarly?: boolean;
 }
 
-export function validate(schema: {[key: string]: any}, options?: IOptions) {
-  options = options || {};
-  options.abortEarly = false;
+function validate(schema: {[key: string]: any}, options?: IOptions) {
+  const _options = options || {};
+  _options.abortEarly = false;
   return function validateRequest(req, res, next) {
     const toValidate: Map<string, any> = new Map<string, any>();
     if (!schema) {
@@ -20,8 +20,6 @@ export function validate(schema: {[key: string]: any}, options?: IOptions) {
       }
     });
 
-    return Joi.validate(toValidate, schema, options, onValidationComplete);
-
     function onValidationComplete(err, validated) {
       if (err) {
         return next(badRequest(err.message, err.details));
@@ -32,5 +30,9 @@ export function validate(schema: {[key: string]: any}, options?: IOptions) {
 
       return next();
     }
+
+    return Joi.validate(toValidate, schema, _options, onValidationComplete);
   };
 }
+
+export default validate;

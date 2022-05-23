@@ -6,41 +6,13 @@ import { randomBytes } from 'crypto';
 import { ComparePassword } from '../utils/EncryptionHelper';
 import logger from '../utils/Logger';
 import constants from '../utils/Constants';
-import { config } from '../config';
+import config from '../config';
 import UserRepository from '../features/users/UserRepository';
 import ISession from '../features/session/ISession';
 import IUser from '../features/users/IUser';
 import IHTTPResponse from '../utils/IHTTPResponse';
 
 const AUTH_PARAMS = config.auth;
-
-export const authenticationMiddleware = async (req, res, next) => {
-  if (!req.cookies || !req.cookies.sessionId) {
-    const response = constants.AUTH.SESSION_MISSING;
-    logger.warn(response);
-    return res.status(response.statusCode).json(response);
-  }
-  // authenticate cookie
-  try {
-    const session = await validateSession(req.cookies.sessionId);
-    // Successful, add the user id to the session
-    if (!req.session) {
-      req.session = {
-        userId: session.userId,
-      };
-    } else {
-      req.session.userId = session.userId;
-    }
-    return next();
-  } catch (err) {
-    // if the session is invalid clear the cookie and redirect to login
-    if (err.statusCode === 401) {
-      res.clearCookie('sessionId');
-      return res.redirect(parseInt(err.statusCode), '/');
-    }
-    return res.status(err.statusCode).json(err);
-  }
-};
 
 const validateSession = async (uuid: string): Promise<ISession> => {
   try {
@@ -74,6 +46,34 @@ const validateSession = async (uuid: string): Promise<ISession> => {
     return Promise.resolve(session);
   } catch (err) {
     return Promise.reject(err);
+  }
+};
+
+const authenticationMiddleware = async (req, res, next) => {
+  if (!req.cookies || !req.cookies.sessionId) {
+    const response = constants.AUTH.SESSION_MISSING;
+    logger.warn(response);
+    return res.status(response.statusCode).json(response);
+  }
+  // authenticate cookie
+  try {
+    const session = await validateSession(req.cookies.sessionId);
+    // Successful, add the user id to the session
+    if (!req.session) {
+      req.session = {
+        userId: session.userId,
+      };
+    } else {
+      req.session.userId = session.userId;
+    }
+    return next();
+  } catch (err) {
+    // if the session is invalid clear the cookie and redirect to login
+    if (err.statusCode === 401) {
+      res.clearCookie('sessionId');
+      return res.redirect(parseInt(err.statusCode, 10), '/');
+    }
+    return res.status(err.statusCode).json(err);
   }
 };
 
@@ -123,3 +123,5 @@ passport.use(new LocalStrategy({ passReqToCallback: true }, (req, username, pass
       done(err);
     });
 }));
+
+export default authenticationMiddleware;

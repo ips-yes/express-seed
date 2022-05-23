@@ -4,7 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import passport from 'passport';
 import upload from 'express-fileupload';
-import { config } from './config/index';
+import config from './config/index';
 import db from './models';
 import logger from './utils/Logger';
 import router from './Routes';
@@ -96,6 +96,7 @@ export default class Server {
       this.app.use(config.app.PATH, router);
 
       // General Exception Handler
+      // eslint-disable-next-line no-unused-vars
       this.app.use((err, req, res, next) => {
         logger.warn(err.message);
         if (err.output) {

@@ -1,5 +1,5 @@
 import Bcrypt from 'bcrypt';
-import { config } from '../config';
+import config from '../config';
 import logger from './Logger';
 import IHTTPResponse from './IHTTPResponse';
 

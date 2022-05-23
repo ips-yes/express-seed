@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize';
-import { config } from '../config';
+import config from '../config';
 import Session from './Session';
 import User from './User';
 import UserType from './UserType';

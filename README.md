@@ -1,22 +1,19 @@
-
 # express-seed
 
 An architecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
 <table table-layout="fixed" width="500px">
     <tr>
     <td>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="sequelize"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="express.js"/>
     </td>
     <td>
-    <img src="http://docs.sequelizejs.com/manual/asset/logo-small.png" alt="sequelize" height="100px" width="100px"/>
+    <img src="https://sequelize.org/img/logo.svg" alt="sequelize.js" height="100px" width="100px"/>
     </td>
     <td>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png" alt="sequelize" height="100px" width="100px"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png" alt="postgres" height="100px" width="100px"/>
     </td>
     </tr>
 </table>
-
-
 
 <br><br>
 
@@ -76,4 +73,3 @@ This route will get the user with the associated ID.
 
 **required query params**
 - id: int
-
