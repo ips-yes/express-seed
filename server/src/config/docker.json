@@ -24,7 +24,7 @@
   },
   "db": {
     "VERSION": "1",
-    "HOST": "localhost",
+    "HOST": "host.docker.internal",
     "NAME": "express-server",
     "USER": "postgres",
     "PASSWORD": "password",
