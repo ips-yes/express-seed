@@ -8,12 +8,6 @@ COPY . .
 
 RUN npm install --production
 RUN npm install typescript
-RUN npm install express
-RUN npm install sequelize
-RUN npm install bcrypt
-RUN npm install winston
-RUN npm install joi
-RUN npm install passport
 RUN npm install yarn
 
 CMD ["yarn", "run", "start"]
