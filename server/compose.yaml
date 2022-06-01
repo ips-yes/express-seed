@@ -1,0 +1,28 @@
+services:
+  application:
+    image: express-seed #TODO: This is probably wrong, needs the identifier once the image is published to docker hub?
+    ports:
+      - "3001:3001"
+    #configs: 
+    #- docker
+    #secrets: #TODO: Decide if server password should be a secret, or all of config should?
+
+  database:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: express-server
+    
+#volumes:
+ # db-volume:
+  #  driver:
+   # driver_opts:
+    #  size:
+  
+#configs:
+  #docker:
+    #external: true
+
+  #secrets:
