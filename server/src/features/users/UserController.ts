@@ -20,7 +20,7 @@ export default class UserController {
     let _user = { ...user };
     try {
       _user.password = await HashPassword(user.password);
-      _user = await UserRepository.Add(user);
+      _user = await UserRepository.Add(_user);
       return {
         ...constants.HTTP.SUCCESS.CREATED,
         id: user.id,
