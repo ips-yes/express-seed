@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx ts-node index.ts",
     "lint": "eslint ./src --ext \".ts,.tsx\" && stylelint \"./src/**/*.css\"",
-    "build": "rm -rf build/ && npx tsc && node build/index.js",
+    "build": "rm -rf build/ && npx tsc",
     "test": "jest -c ./jest.unit.json --detectOpenHandles",
     "test:coverage": "jest --coverage -c ./jest.unit.json --detectOpenHandles"
   },
