@@ -15,11 +15,10 @@ An architecturally sound starting point for a RESTful service utilizing expressj
     </tr>
 </table>
 
-<br><br>
 
 - **bcrypt:** One way encryption of passwords
-- **joi:** validates the request objects before route entry
-- **passport:** authentication and authorization middleware
+- **joi:** Validates the request objects before route entry
+- **passport:** Authentication and authorization middleware
 - **winston:** Logging framework
 
 ## Class Organization
@@ -73,3 +72,21 @@ This route will get the user with the associated ID.
 
 **required query params**
 - id: int
+
+## Scripts
+- `start`
+  - Runs the application.
+- `lint`
+  - Runs the linter on both source code and styling modules.
+- `build`
+  - Builds the source code into a `build` directory containing JavaScript that can be hosted on a server.
+- `test`
+  - Runs any test modules within the project. Refer to [Testing](#testing) for more information on test files.
+- `test:coverage`
+  - Save as `test`, just with coverage.
+
+## Testing
+Tests can be implemented in two different ways:
+
+- Create a file ending with `test.ts` within the `src/__tests__` directory.
+- Create a file ending with `test.ts` anywhere within the `src` directory, preferably within the same directory as the test subject(s).

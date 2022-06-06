@@ -1,8 +1,10 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
+
 import * as Sequelize from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 import config from '../config';
-import Session from './Session';
-import User from './User';
-import UserType from './UserType';
 
 const db: any = {};
 const DB_PARAMS = config.db;
@@ -21,14 +23,16 @@ const sequelize = new Sequelize.Sequelize(DB_PARAMS.NAME, DB_PARAMS.USER, DB_PAR
   },
 });
 
-const session = Session(sequelize, Sequelize.DataTypes);
-db[session.name] = session;
+// Add models from models dir to db object for later use in repositories
+fs
+  .readdirSync(path.join(__dirname, '..', 'models'))
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== 'index.ts'))
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
 
-const user = User(sequelize, Sequelize.DataTypes);
-db[user.name] = user;
-const userType = UserType(sequelize, Sequelize.DataTypes);
-db[userType.name] = userType;
-
+// Associate tables
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
