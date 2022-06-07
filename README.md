@@ -1,28 +1,24 @@
-
 # express-seed
 
 An architecturally sound starting point for a RESTful service utilizing expressjs, sequelize, and PostgreSQL.
 <table table-layout="fixed" width="500px">
     <tr>
     <td>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="sequelize"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Expressjs.png/220px-Expressjs.png" alt="express.js"/>
     </td>
     <td>
-    <img src="http://docs.sequelizejs.com/manual/asset/logo-small.png" alt="sequelize" height="100px" width="100px"/>
+    <img src="https://sequelize.org/img/logo.svg" alt="sequelize.js" height="100px" width="100px"/>
     </td>
     <td>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png" alt="sequelize" height="100px" width="100px"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/120px-Postgresql_elephant.svg.png" alt="postgres" height="100px" width="100px"/>
     </td>
     </tr>
 </table>
 
 
-
-<br><br>
-
 - **bcrypt:** One way encryption of passwords
-- **joi:** validates the request objects before route entry
-- **passport:** authentication and authorization middleware
+- **joi:** Validates the request objects before route entry
+- **passport:** Authentication and authorization middleware
 - **winston:** Logging framework
 
 ## Class Organization
@@ -58,16 +54,16 @@ Project favores the division of classes by feature instead of by class type. Con
 This route will create a user. Note that when creating the first user you'll need to remove the authentication middleware temporarily
 
 **required body params**
-- email : string
-- password : string 8 characters, One Uppercase, One Lowercase, One number, One special char
-- userTypeId : int
+- email: string
+- password: string 8 characters, One Uppercase, One Lowercase, One number, One special char
+- userTypeId: int
 
 **POST /users/login**
 
 This route will attempt to login the given user. It will return a session token which must then be provided for authorization on requests
 
 **required body params**
-- email : string
+- username: string
 - password: string
 
 **GET /users/<id>**
@@ -75,5 +71,22 @@ This route will attempt to login the given user. It will return a session token 
 This route will get the user with the associated ID.
 
 **required query params**
-- id : int
+- id: int
 
+## Scripts
+- `start`
+  - Runs the application.
+- `lint`
+  - Runs the linter on both source code and styling modules.
+- `build`
+  - Builds the source code into a `build` directory containing JavaScript that can be hosted on a server.
+- `test`
+  - Runs any test modules within the project. Refer to [Testing](#testing) for more information on test files.
+- `test:coverage`
+  - Save as `test`, just with coverage.
+
+## Testing
+Tests can be implemented in two different ways:
+
+- Create a file ending with `test.ts` within the `src/__tests__` directory.
+- Create a file ending with `test.ts` anywhere within the `src` directory, preferably within the same directory as the test subject(s).

@@ -1,11 +1,11 @@
 {
   "app": {
-    "NAME": "Express Seed",
+    "NAME": "Express Server",
     "PORT": 3001,
     "CLIENT_PORT" : "3000",
-    "VERSION": "1.0.0",
+    "VERSION": "0.0.1",
     "ADDRESS": "localhost",
-    "PATH": "/express_seed/api/v1",
+    "PATH": "/express-server/api/v1",
     "HTTP": "http"
   },
   "auth": {
@@ -25,9 +25,9 @@
   "db": {
     "VERSION": "1",
     "HOST": "localhost",
-    "NAME": "express_seed",
+    "NAME": "express-server",
     "USER": "postgres",
-    "PASSWORD": "admin",
+    "PASSWORD": "password",
     "SYNC": false
   },
   "sessionLife": {
