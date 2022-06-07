@@ -16,7 +16,7 @@ export default {
       // One Lower Case
       // One Number
       // One Special character
-      password: Joi.string().regex(PASSWORD_REGEX).required(),
+      password: Joi.string().regex(PASSWORD_REGEX).required().error(() => '"password" must be between 8 and 32 characters, and contain atleast: one uppercase letter, one lowercase letter, one number, and one special character.'),
       userTypeId: Joi.number().required(),
     },
   },
