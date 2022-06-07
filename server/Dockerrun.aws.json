@@ -1,0 +1,12 @@
+{
+  "Image": {
+    "Name": "ips/express-seed"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 3001,
+      "HostPort": 5432
+    }
+  ]
+}
+          

@@ -3,11 +3,8 @@ import moment from 'moment';
 import UserRepository from './UserRepository';
 import { HashPassword } from '../../utils/EncryptionHelper';
 import constants from '../../utils/Constants';
-import config from '../../config';
 import IHTTPResponse from '../../utils/IHTTPResponse';
 import IUser from './IUser';
-
-const SESSION_LIFE_PARAMS = config.sessionLife;
 
 export default class UserController {
   /**
@@ -57,7 +54,7 @@ export default class UserController {
     * @returns {Promise} with the result or error
    */
   public static async ClearStaleSessions(): Promise<any[]> {
-    const cutoffDate = moment().subtract(SESSION_LIFE_PARAMS.staleSessionTimeToLiveInDays, 'days').toDate();
+    const cutoffDate = moment().toDate();
     try {
       return await UserRepository.ClearStaleSessions(cutoffDate);
     } catch (err) {
