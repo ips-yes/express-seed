@@ -16,6 +16,7 @@
     "boom": "^7.3.0",
     "cookie-parser": "^1.4.5",
     "crypto": "^1.0.1",
+    "dotenv": "^16.0.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-rate-limit": "^5.2.6",
