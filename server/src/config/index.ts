@@ -37,10 +37,10 @@ const config : IConfig = {
     },
     "db": {
       "VERSION": envVars.DB_VERSION,
-      "HOST": envVars.DB_HOST,
-      "NAME": envVars.DB_NAME,
-      "USER": envVars.DB_USERNAME,
-      "PASSWORD": envVars.DB_PASSWORD,
+      "HOST": envVars.RDS_HOSTNAME,
+      "NAME": envVars.RDS_DB_NAME,
+      "USER": envVars.RDS_USERNAME,
+      "PASSWORD": envVars.RDS_PASSWORD,
       "SYNC": Boolean(envVars.DB_SYNC)
     },
     "sessionLife": {
