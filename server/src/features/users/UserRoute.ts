@@ -1,5 +1,6 @@
 /* Created by anthonyg 01-05-2018 */
 import * as express from 'express';
+import * as csrf from 'csurf';
 import passport from 'passport';
 import validate from '../../middleware/JoiValidator';
 import constants from '../../utils/Constants';
@@ -13,6 +14,8 @@ const router = express.Router();
 
 const AUTH_PARAMS = config.auth;
 
+const csrfProtection = csrf.default({ cookie: true });
+
 //= ==============================================================================================//
 //  ROUTES                                                                                       //
 //= ==============================================================================================//
@@ -21,7 +24,7 @@ const AUTH_PARAMS = config.auth;
  * This route will add a user.  IMPORTANT to create your first user remove the
  * authenticationMiddleware temporarily
  */
-router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
+router.post('/', authenticationMiddleware, csrfProtection, validate(UserValidation.PostUser),
   (req, res, next) => {
     logger.info('POST User');
     UserController.Add(req.body)
@@ -34,7 +37,7 @@ router.post('/', authenticationMiddleware, validate(UserValidation.PostUser),
 /**
  * This route will fetch a user by id
  */
-router.get('/:id', authenticationMiddleware, validate(UserValidation.GetUser), (req, res, next) => {
+router.get('/:id', authenticationMiddleware, csrfProtection, validate(UserValidation.GetUser), (req, res, next) => {
   logger.info('GET User');
 
   UserController.GetById(req.params.id)
