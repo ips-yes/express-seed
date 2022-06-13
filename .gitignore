@@ -17,3 +17,8 @@ express-seed.njsproj
 
 # Build directory
 server/build
+
+#codeQL
+server/codeql
+server/codeqlQuery
+server/0.1.3

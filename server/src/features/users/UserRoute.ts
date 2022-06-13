@@ -53,7 +53,7 @@ router.post('/login', validate(UserValidation.Login), passport.authenticate('loc
   const response = constants.AUTH.PASSWORD_SUCCESS;
 
   // Note that 3600000 converts our cookieLife param from hours to milliseconds
-  const cookieOptions = { maxAge: AUTH_PARAMS.cookieLife * 3600000 };
+  const cookieOptions = { maxAge: AUTH_PARAMS.cookieLife * 3600000, secure: true, httpOnly: true };
   res.cookie('sessionId', req['session']['passport'].user.uuid, cookieOptions);
   return res.status(200).json(response);
 });
