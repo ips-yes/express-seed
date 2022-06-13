@@ -5,6 +5,7 @@ import passport from 'passport';
 import validate from '../../middleware/JoiValidator';
 import constants from '../../utils/Constants';
 import UserValidation from './UserValidation';
+import checkProtocol from '../../middleware/CheckProtocol';
 import logger from '../../utils/Logger';
 import authenticationMiddleware from '../../middleware/Auth';
 import UserController from './UserController';
@@ -48,7 +49,8 @@ router.get('/:id', authenticationMiddleware, csrfProtection, validate(UserValida
 /**
  * This route will attempt to login the user with the given credentials
  */
-router.post('/login', validate(UserValidation.Login), passport.authenticate('local'), (req, res) => {
+router.post('/login', checkProtocol, validate(UserValidation.Login), passport.authenticate('local'), (req, res) => {
+
   logger.info('Login');
   const response = constants.AUTH.PASSWORD_SUCCESS;
 
