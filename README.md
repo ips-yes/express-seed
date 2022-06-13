@@ -87,19 +87,25 @@ This route will get the user with the associated ID.
 
 ## Development Environment Setup
     
+**Run locally**
+- Download Postgres from https://www.postgresql.org/download/ to run a database locally
+- Open a terminal in the server directory
+- run ``yarn run start`` to start the program
+
 **Docker setup**
 - Install docker desktop from https://www.docker.com/products/docker-desktop/
 - Ensure virtualization is enabled
+- Open a terminal in the server directory
 - Run ``docker build —tag express-seed .`` to build the image for the project
 - Run ``docker compose up`` to start the project
 
 **PGAdmin setup**
 - Download PGAdmin from https://www.pgadmin.org/download/
-- Follow the instructions in Docker Setup to install docker and launch the project
+- Follow the instructions in Docker Setup or Run Locally to launch the project
 - Open PGAdmin and select “add new server” from the main screen
 - Make a name for the server
 - Go to the Connection tab, set the host address as `localhost`
-- Set the password to the same password set in server/config/docker.json
+- Set the password to the same password set in server/config/docker.json or server/config/dev.json depending on if you're running the project in docker or locally
 - You should see a database in the server named ‘express-server’, open this and go to Schemas/Public/Tables to view data
     
 ## Testing
