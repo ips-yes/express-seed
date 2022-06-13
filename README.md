@@ -89,7 +89,11 @@ This route will get the user with the associated ID.
     
 **Run locally**
 - Download Postgres from https://www.postgresql.org/download/ to run a database locally
+- Download nodeJS from https://nodejs.org/en/download/
+- Follow the instructions in PGAdmin setup for running locally to set up the postgres database
 - Open a terminal in the server directory
+- run ``npm install --location=global yarn`` to install yarn globally (you may need to use ``sudo``)
+- run ``yarn install`` to install other dependancies
 - run ``yarn run start`` to start the program
 
 **Docker setup**
@@ -101,12 +105,19 @@ This route will get the user with the associated ID.
 
 **PGAdmin setup**
 - Download PGAdmin from https://www.pgadmin.org/download/
-- Follow the instructions in Docker Setup or Run Locally to launch the project
-- Open PGAdmin and select “add new server” from the main screen
-- Make a name for the server
-- Go to the Connection tab, set the host address as `localhost`
-- Set the password to the same password set in server/config/docker.json or server/config/dev.json depending on if you're running the project in docker or locally
-- You should see a database in the server named ‘express-server’, open this and go to Schemas/Public/Tables to view data
+- If using docker:
+    -follow the instructions in Docker Setup to launch the project
+    - Open PGAdmin and select “add new server” from the main screen
+    - Make a name for the server
+    - Go to the Connection tab, set the host address as `localhost`
+    - Set the password to the same password set in server/config/docker.json
+    - You should see a database in the server named ‘express-server’, open this and go to Schemas/Public/Tables to view data
+- If running locally:
+    - Download postgres as in the Run locally section
+    - You should see the default postgres server in PGAdmin, connect to it with the password you set when installing postgres
+    - Navigate to Databases, right click and add a database named "express-server"
+    - from that database go to Schemas/Public/Tables to view data after running the project
+    
     
 ## Testing
 Tests can be implemented in two different ways:
