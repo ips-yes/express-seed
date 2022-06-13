@@ -20,5 +20,6 @@ server/build
 
 #codeQL
 server/codeql
+server/codeql2
 server/codeqlQuery
 server/0.1.3
