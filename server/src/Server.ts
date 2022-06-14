@@ -141,24 +141,23 @@ export default class Server {
       // =============================================================================================== //
       // start the server
       try {
-
         const key = process.env.KEY;
         const cert = process.env.CERT;
 
         const options = {
-          key: key,
-          cert: cert
+          key,
+          cert,
         };
 
         https.createServer(options, this.app).listen(config.app.PORT_SECURE, () => {
           logger.info(
-            `****************************** HTTPS Server Listening on Port:${config.app.PORT_SECURE} ******************************`,
+            `********************* HTTPS Server Listening on Port:${config.app.PORT_SECURE} *********************`,
           );
         });
 
         this.app.listen(config.app.PORT, () => {
           logger.info(
-            `****************************** HTTP Server Listening on Port:${config.app.PORT} ******************************`,
+            `********************* HTTP Server Listening on Port:${config.app.PORT} *********************`,
           );
         });
 
