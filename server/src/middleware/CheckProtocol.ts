@@ -3,7 +3,7 @@ import logger from '../utils/Logger';
 
 const checkProtocol = async (req, res, next) => {
     if(req.protocol != 'https'){
-        logger.info('Unsecure login attempt');
+        logger.info('User sent HTTPS only request over HTTP');
         return res.status(401).json(constants.AUTH.BAD_PROTOCOL);
     }
 

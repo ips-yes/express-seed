@@ -9,6 +9,7 @@ const config : IConfig = {
     "app": {
       "NAME": envVars.APP_NAME,
       "PORT": +envVars.APP_PORT,
+      "PORT_SECURE": +envVars.PORT_SECURE,
       "CLIENT_PORT": envVars.APP_CLIENT_PORT,
       "VERSION": envVars.VERSION,
       "ADDRESS": envVars.ADDRESS,

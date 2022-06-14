@@ -151,11 +151,18 @@ export default class Server {
           cert: cert
         };
 
-        https.createServer(options, this.app).listen(config.app.PORT, () => {
+        https.createServer(options, this.app).listen(config.app.PORT_SECURE, () => {
           logger.info(
-            `****************************** Server Listening on Port:${config.app.PORT} ******************************`,
+            `****************************** HTTPS Server Listening on Port:${config.app.PORT_SECURE} ******************************`,
           );
         });
+
+        this.app.listen(config.app.PORT, () => {
+          logger.info(
+            `****************************** HTTP Server Listening on Port:${config.app.PORT} ******************************`,
+          );
+        });
+
         // clean up stale sessions
         /**
          * Convert the number of days to millis and take the min of that and the max 32 bit signed integer.

@@ -25,7 +25,7 @@ const csrfProtection = csrf.default({ cookie: true });
  * This route will add a user.  IMPORTANT to create your first user remove the
  * authenticationMiddleware temporarily
  */
-router.post('/', authenticationMiddleware, csrfProtection, validate(UserValidation.PostUser),
+router.post('/', checkProtocol, authenticationMiddleware, csrfProtection, validate(UserValidation.PostUser),
   (req, res, next) => {
     logger.info('POST User');
     UserController.Add(req.body)
