@@ -2,7 +2,6 @@ import { Express } from 'express';
 import * as rateLimit from 'express-rate-limit';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import fs from 'fs';
 import https from 'https';
 import passport from 'passport';
 import upload from 'express-fileupload';
@@ -24,7 +23,7 @@ export default class Server {
     public async start(): Promise<void> {
       logger.info('****************************** Server Starting Up ******************************');
       // =============================================================================================== //
-      //  SHUTDOWN EVENTS                                                                                 //
+      //  SHUTDOWN EVENTS                                                                                //
       // =============================================================================================== //
       // listen for exiting on Windows or Linux
       const onServerClosed = () => {
