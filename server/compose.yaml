@@ -3,11 +3,8 @@ services:
     image: express-seed
     ports:
       - "3001:3001"
-    configs: 
-      - source: docker
-        target: ./express_seed/config/docker.json
-
-    #secrets: #TODO: Decide if server password should be a secret, or all of config should?
+    env_file:
+      - .env
 
   database:
     image: postgres
@@ -25,9 +22,3 @@ services:
     
 volumes:
   db-volume:
-  
-configs:
-  docker:
-    file: ./config/docker.json
-
-  #secrets:
