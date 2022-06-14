@@ -143,8 +143,8 @@ export default class Server {
       // start the server
       try {
 
-        const key = fs.readFileSync(process.env.KEY_PATH);
-        const cert = fs.readFileSync(process.env.CERT_PATH);
+        const key = process.env.KEY;
+        const cert = process.env.CERT;
 
         const options = {
           key: key,

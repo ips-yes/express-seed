@@ -1,5 +1,5 @@
 # Enviroment file (secrets)
-server/.env
+server/*.env
 
 # NPM/Yarn packages
 /server/node_modules
