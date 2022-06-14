@@ -143,8 +143,8 @@ export default class Server {
       // start the server
       try {
 
-        const key = fs.readFileSync('C:/Users/awang/Desktop/LocalhostKey/localhost-key.pem'); //TODO: Replace these with env variables
-        const cert = fs.readFileSync('C:/Users/awang/Desktop/LocalhostKey/localhost.pem');
+        const key = fs.readFileSync(process.env.KEY_PATH);
+        const cert = fs.readFileSync(process.env.CERT_PATH);
 
         const options = {
           key: key,
