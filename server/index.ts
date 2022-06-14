@@ -5,5 +5,3 @@ const app = express();
 
 const server = new Server(app);
 server.start();
-
-//testgsdgsgs

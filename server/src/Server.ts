@@ -2,6 +2,8 @@ import { Express } from 'express';
 import * as rateLimit from 'express-rate-limit';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import fs from 'fs';
+import https from 'https';
 import passport from 'passport';
 import upload from 'express-fileupload';
 import config from './config/index';
@@ -22,7 +24,7 @@ export default class Server {
     public async start(): Promise<void> {
       logger.info('****************************** Server Starting Up ******************************');
       // =============================================================================================== //
-      //  SHUTDOWN EVENTS                                                                                //
+      //  SHUTDOWN EVENTS                                                                                 //
       // =============================================================================================== //
       // listen for exiting on Windows or Linux
       const onServerClosed = () => {
@@ -140,7 +142,16 @@ export default class Server {
       // =============================================================================================== //
       // start the server
       try {
-        this.app.listen(config.app.PORT, () => {
+
+        const key = fs.readFileSync('C:/Users/awang/Desktop/LocalhostKey/localhost-key.pem'); //TODO: Replace these with env variables
+        const cert = fs.readFileSync('C:/Users/awang/Desktop/LocalhostKey/localhost.pem');
+
+        const options = {
+          key: key,
+          cert: cert
+        };
+
+        https.createServer(options, this.app).listen(config.app.PORT, () => {
           logger.info(
             `****************************** Server Listening on Port:${config.app.PORT} ******************************`,
           );
