@@ -3,6 +3,7 @@ services:
     image: express-seed
     ports:
       - "3001:3001"
+      - "3002:3002"
     env_file:
       - docker.env
 
