@@ -18,12 +18,6 @@ const repoErr: IRepoError = {
   statusCode: 500,
 };
 
-const dupeErr: IRepoError = {
-  location: 'UserRepository.js',
-  statusCode: 409,
-  message: 'A user with that email already exists',
-};
-
 const standardError = (message: string) => {
   repoErr.message = message;
   logger.warn(repoErr);
@@ -32,16 +26,6 @@ const standardError = (message: string) => {
 export default class UserRepository {
   public static async Add(user): Promise<IUser> {
     try {
-      const duplicate: IUser = await db.User.findOne({
-        where: {
-          email: user.email,
-          deleted: false,
-        },
-      });
-      if (duplicate != null) {
-        return Promise.reject(dupeErr);
-      }
-
       return await db.User.create(user);
     } catch (err) {
       standardError(`${err.name} ${err.message}`);
