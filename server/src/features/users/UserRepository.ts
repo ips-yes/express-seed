@@ -20,7 +20,7 @@ const repoErr: IRepoError = {
 
 const dupeErr: IRepoError = {
   location: 'UserRepository.js',
-  statusCode: 422,
+  statusCode: 409,
   message: 'A user with that email already exists',
 };
 
