@@ -8,5 +8,6 @@ const router = express.Router();
 // =============================================================================================== //
 
 router.use('/users', userRouter);
+router.use('/check', (req, res) => res.json('OK'));
 
 export = router;
