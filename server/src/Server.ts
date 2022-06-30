@@ -2,6 +2,7 @@ import { Express } from 'express';
 import * as rateLimit from 'express-rate-limit';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
+import https from 'https';
 import passport from 'passport';
 import upload from 'express-fileupload';
 import config from './config/index';
@@ -140,11 +141,26 @@ export default class Server {
       // =============================================================================================== //
       // start the server
       try {
-        this.app.listen(config.app.PORT, () => {
+        const key = process.env.KEY;
+        const cert = process.env.CERT;
+
+        const options = {
+          key,
+          cert,
+        };
+
+        https.createServer(options, this.app).listen(config.app.PORT_SECURE, () => {
           logger.info(
-            `****************************** Server Listening on Port:${config.app.PORT} ******************************`,
+            `********************* HTTPS Server Listening on Port:${config.app.PORT_SECURE} *********************`,
           );
         });
+
+        this.app.listen(config.app.PORT, () => {
+          logger.info(
+            `********************* HTTP Server Listening on Port:${config.app.PORT} *********************`,
+          );
+        });
+
         // clean up stale sessions
         /**
          * Convert the number of days to millis and take the min of that and the max 32 bit signed integer.

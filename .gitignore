@@ -1,5 +1,5 @@
 # Enviroment file (secrets)
-server/.env
+server/*.env
 
 # NPM/Yarn packages
 /server/node_modules
@@ -17,3 +17,9 @@ express-seed.njsproj
 
 # Build directory
 server/build
+
+#codeQL
+server/codeql
+server/codeql2
+server/codeqlQuery
+server/0.1.3

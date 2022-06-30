@@ -1,6 +1,7 @@
 export interface IAppConfig {
     NAME: string;
     PORT: number;
+    PORT_SECURE: number;
     CLIENT_PORT: string;
     VERSION: string;
     ADDRESS: string;

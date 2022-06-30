@@ -51,6 +51,12 @@ export default {
         message: 'Login Successful',
       };
     },
+    get BAD_PROTOCOL() {
+      return {
+        statusCode: 403,
+        message: 'You must send this request over HTTPS',
+      };
+    },
     get SESSION_FAIL() {
       return {
         statusCode: 401,
