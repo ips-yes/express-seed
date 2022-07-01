@@ -2,44 +2,35 @@
     "Outputs": {},
     "AWSTemplateFormatVersion": "2010-09-09",
     "Parameters": {
-        "LogPublicationControl": {
-            "NoEcho": "true",
-            "Type": "String",
-            "Description": "If true customer service logs will be published to S3.",
-            "AllowedValues": [
-                "true",
-                "false"
-            ],
-            "ConstraintDescription": "must be Boolean.",
-            "Default": "false"
-        },
-        "HooksPkgUrl": {
-            "NoEcho": "true",
-            "Type": "String",
-            "Description": "Hooks package URL",
-            "Default": "https://elasticbeanstalk-platform-assets-us-east-1.s3.amazonaws.com/stalks/eb_docker_amazon_linux_2_1.0.2004.0_20220519221655/lib/hooks.tar.gz"
-        },
-        "ProxyServer": {
-            "NoEcho": "true",
-            "Type": "String",
-            "Description": "Specifies which proxy server to be used for client connections.",
-            "AllowedValues": [
-                "nginx",
-                "none"
-            ],
-            "Default": "nginx"
-        },
         "DatabasePassword": {
             "NoEcho": "true",
             "Type": "String",
             "Description": "Master password for the postgres user on the database.",
             "Default": ""
         },
-        "EnvironmentVariables": {
-            "NoEcho": "true",
-            "Type": "CommaDelimitedList",
-            "Description": "Program environment variables.",
+        "S3Bucket": {
+            "NoEcho": "false",
+            "Type": "String",
+            "Description": "The name of the amazon s3 bucket with your application's compose file/source bundle.",
             "Default": ""
+        },
+        "S3BucketKey": {
+            "NoEcho": "false",
+            "Type": "String",
+            "Description": "The key of your compose file/source bundle in your amazon s3 bucket.",
+            "Default": ""
+        },
+        "HTTPPort": {
+            "NoEcho": "false",
+            "Type": "Number",
+            "Description": "The port to listen for HTTP traffic on.",
+            "Default": 3001
+        },
+        "HTTPSPort": {
+            "NoEcho": "false",
+            "Type": "Number",
+            "Description": "The port to listen for HTTPS traffic on.",
+            "Default": 3002
         }
     },
     "Resources": {
@@ -237,12 +228,12 @@
                     {
                         "Namespace": "aws:elasticbeanstalk:application",
                         "OptionName": "Application Healthcheck URL",
-                        "Value": "HTTP:3001/express-server/api/v1/check"
+                        "Value": {"Fn::Join" : ["", ["HTTP:", {"Ref": "HTTPPort"}, "/express-server/api/v1/check"]]}
                     },
                     {
-                        "Namespace": "aws:elb:listener:3001",
+                        "Namespace": {"Fn::Join" : ["", ["aws:elb:listener:", {"Ref": "HTTPPort"}]]},
                         "OptionName": "InstancePort",
-                        "Value": "3001"
+                        "Value": {"Ref": "HTTPPort"}
                     },
                     {
                         "Namespace": "aws:autoscaling:launchconfiguration",
@@ -299,8 +290,12 @@
                     "Ref": "ExpressSeedApplication"
                 },
                 "SourceBundle": {
-                    "S3Bucket": "elasticbeanstalk-us-east-1-334419516427",
-                    "S3Key": "docker-compose.yml"
+                    "S3Bucket": {
+                        "Ref": "S3Bucket"
+                    },
+                    "S3Key": {
+                        "Ref": "S3BucketKey"
+                    }
                 }
             },
             "Metadata": {
@@ -379,28 +374,28 @@
                 "SecurityGroupIngress": [
                     {
                         "CidrIp": "0.0.0.0/0",
-                        "FromPort": "3001",
-                        "ToPort": "3001",
+                        "FromPort": {"Ref": "HTTPPort"},
+                        "ToPort": {"Ref": "HTTPPort"},
                         "IpProtocol": "tcp"
                     },
                     {
                         "CidrIp": "0.0.0.0/0",
-                        "FromPort": "3002",
-                        "ToPort": "3002",
+                        "FromPort": {"Ref": "HTTPSPort"},
+                        "ToPort": {"Ref": "HTTPSPort"},
                         "IpProtocol": "tcp"
                     }
                 ],
                 "SecurityGroupEgress": [
                     {
                         "CidrIp": "0.0.0.0/0",
-                        "FromPort": "3001",
-                        "ToPort": "3001",
+                        "FromPort": {"Ref": "HTTPPort"},
+                        "ToPort": {"Ref": "HTTPPort"},
                         "IpProtocol": "tcp"
                     },
                     {
                         "CidrIp": "0.0.0.0/0",
-                        "FromPort": "3002",
-                        "ToPort": "3002",
+                        "FromPort": {"Ref": "HTTPSPort"},
+                        "ToPort": {"Ref": "HTTPSPort"},
                         "IpProtocol": "tcp"
                     }
                 ]
@@ -420,16 +415,16 @@
                 },
                 "SecurityGroupIngress": [
                     {
-                        "FromPort": "3001",
-                        "ToPort": "3001",
+                        "FromPort": {"Ref": "HTTPPort"},
+                        "ToPort": {"Ref": "HTTPPort"},
                         "IpProtocol": "tcp",
                         "SourceSecurityGroupId": {
                             "Ref": "LoadBalancerSG"
                         }
                     },
                     {
-                        "FromPort": "3002",
-                        "ToPort": "3002",
+                        "FromPort": {"Ref": "HTTPSPort"},
+                        "ToPort": {"Ref": "HTTPSPort"},
                         "IpProtocol": "tcp",
                         "SourceSecurityGroupId": {
                             "Ref": "LoadBalancerSG"
@@ -738,6 +733,9 @@
                     "4e352d07-8d93-4697-8e47-73499a45a01d",
                     "4e352d07-8d93-4697-8e47-73499a45a01d",
                     "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
                     "4e352d07-8d93-4697-8e47-73499a45a01d"
                 ]
             },
@@ -786,6 +784,9 @@
                     "5f2c2c47-0ad8-4b12-a026-44addb6f43d7"
                 ],
                 "iscontainedinside": [
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
                     "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
                     "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
                     "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
