@@ -1,0 +1,100 @@
+services:
+  application:
+    image: intelligentproductsolutions/express-seed:latest
+    ports:
+      - 80:80
+      - 22:22
+    environment:
+
+      NODE_ENV: development
+
+      APP_NAME: "Express Seed"
+      APP_PORT: "${APP_PORT}"
+      PORT_SECURE: "${PORT_SECURE}"
+      CLIENT_PORT: 3000
+      VERSION: 1.0.0
+      ADDRESS: ""
+      API_PATH: "/express-server/api/v1"
+      HTTP: http
+
+      COOKIE_LIFE: 24
+      BCRYPT_COST_FACTOR: 8
+      RECOVERY_LIFE: 240
+      MAX_SESSIONS: 3
+      STALE_SESSION_TIME_TO_LIVE_IN_DAYS: 31
+      SESSION_CLEANUP_FREQUENCY_IN_DAYS: 24
+
+
+      RATE_ENABLE: "true"
+      RATE_WINDOW_MS: 60000
+      RATE_MAX : 2000
+      RATE_DELAY_MS: 0
+
+
+      DB_VERSION: 1
+
+      RDS_HOSTNAME: "${RDS_HOSTNAME}"
+      RDS_DB_NAME: postgres
+      RDS_USERNAME: postgres
+      RDS_PASSWORD: "${RDS_PASSWORD}"
+      RDS_PORT: 5432
+      DB_SYNC: "false"
+
+
+      KEY: |
+        -----BEGIN PRIVATE KEY-----
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificat
+        -----END PRIVATE KEY-----
+
+
+      CERT: |
+        -----BEGIN CERTIFICATE-----
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCertificateThisIsNotAReal
+        ThisIsNotARealCertificateThisIsNotARealCerti
+        -----END CERTIFICATE-----

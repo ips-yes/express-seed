@@ -24,13 +24,13 @@
             "NoEcho": "false",
             "Type": "Number",
             "Description": "The port to listen for HTTP traffic on.",
-            "Default": 3001
+            "Default": 80
         },
         "HTTPSPort": {
             "NoEcho": "false",
             "Type": "Number",
             "Description": "The port to listen for HTTPS traffic on.",
-            "Default": 3002
+            "Default": 22
         }
     },
     "Resources": {
@@ -202,6 +202,27 @@
                                 "PostgresDatabase",
                                 "Endpoint.Address"
                             ]
+                        }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "RDS_PASSWORD",
+                        "Value": {
+                            "Ref":"DatabasePassword"
+                        }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "APP_PORT",
+                        "Value": {
+                            "Ref": "HTTPPort"
+                        }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "PORT_SECURE",
+                        "Value": {
+                            "Ref": "HTTPSPort"
                         }
                     },
                     {
@@ -439,7 +460,7 @@
             }
         }
     },
-    "Description": "AWS Elastic Beanstalk environment (Name: 'Expressseed-env-1'  Id: 'e-mcrcy26rtw')",
+    "Description": "VPC, Database, and Elastic Beanstalk environment for express-seed program",
     "Mappings": {
         "ContainerMetaARM": {
             "AMIMeta": {
