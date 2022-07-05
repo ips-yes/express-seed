@@ -6,7 +6,7 @@ services:
       - "3002:3002"
     env_file:
       - docker.env
-      
+
   database:
     image: postgres
     ports:
@@ -20,6 +20,6 @@ services:
         source: db-volume
         target: /var/lib/postgresql/data
 
-
+    
 volumes:
-  db-volume: 
+  db-volume:
