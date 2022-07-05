@@ -40,8 +40,6 @@
 
         "dot-notation": "off",
 
-        "no-underscore-dangle": "off",
-
-        "linebreak-style": 0
+        "no-underscore-dangle": "off"
     }
 }
