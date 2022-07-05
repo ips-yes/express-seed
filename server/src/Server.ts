@@ -38,11 +38,29 @@ export default class Server {
       // =============================================================================================== //
 
       // Verify database connection and sync if we wish
+      let DBConnectionMessage = 'Database not found, will attempt to reconnect on next db reliant request';
+
+      if (config.db.AUTO_RECONNECT) {
+        DBConnectionMessage += ` or after ${config.db.RECONNECT_PERIOD} ms`;
+      }
+
       ping.getPromise().then((online) => {
         if (!online) {
-          logger.warn('Database not found, will attempt to reconnect on next db reliant request');
+          logger.warn(DBConnectionMessage);
         }
       });
+
+      if (config.db.AUTO_RECONNECT) {
+        setInterval(() => {
+          if (!ping.databaseConnected) {
+            ping.getPromise().then((online) => {
+              if (!online) {
+                logger.warn(DBConnectionMessage);
+              }
+            });
+          }
+        }, config.db.RECONNECT_PERIOD);
+      }
 
       // =============================================================================================== //
       //  MIDDLEWARE                                                                                     //
