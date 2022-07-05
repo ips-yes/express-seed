@@ -4,7 +4,7 @@ const ping = databasePing.default;
 
 const databaseHealth = async (req, res, next) => {
   // if the server thinks it's already connected, confirm the response is good, and then send it through.
-  if (ping.databaseConnected) { 
+  if (ping.databaseConnected) {
     const { end } = res;
 
     res.end = function (a, b) { // This checks the status code of the response, to check if a disconnect has occured.
@@ -24,7 +24,7 @@ const databaseHealth = async (req, res, next) => {
     return res.status(500).json('Database could not be found. Please try again later.');
   }
   // If the database isnt connected, ping it to try and connect!
-  return ping.getPromise().then((online) => { 
+  return ping.getPromise().then((online) => {
     if (online) { // Connection was successful, but lets check to make sure
       const { end } = res;
 

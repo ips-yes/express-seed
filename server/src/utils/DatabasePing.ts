@@ -8,7 +8,7 @@ export default class DatabasePing {
   static instance;
 
   /// if the server thinks the database is connected or not
-  static databaseConnected = false; 
+  static databaseConnected = false;
 
   static isSearching;
 
