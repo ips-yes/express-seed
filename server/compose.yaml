@@ -1,8 +1,25 @@
 services:
   application:
-    image: intelligentproductsolutions/express-seed:latest
+    image: express-seed
     ports:
       - "3001:3001"
       - "3002:3002"
     env_file:
       - docker.env
+      
+  database:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: express-server
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - type: volume
+        source: db-volume
+        target: /var/lib/postgresql/data
+
+
+volumes:
+  db-volume: 
