@@ -149,11 +149,15 @@ export default class Server {
           cert,
         };
 
-        https.createServer(options, this.app).listen(config.app.PORT_SECURE, () => {
-          logger.info(
-            `********************* HTTPS Server Listening on Port:${config.app.PORT_SECURE} *********************`,
-          );
-        });
+        try {
+          https.createServer(options, this.app).listen(config.app.PORT_SECURE, () => {
+            logger.info(
+              `********************* HTTPS Server Listening on Port:${config.app.PORT_SECURE} *********************`,
+            );
+          });
+        } catch {
+          logger.warn('Could not set up HTTPS listener, is your certificate valid?');
+        }
 
         this.app.listen(config.app.PORT, () => {
           logger.info(
