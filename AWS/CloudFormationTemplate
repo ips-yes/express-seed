@@ -43,17 +43,11 @@
                 "AvailabilityZone": "us-east-1a",
                 "Engine": "postgres",
                 "MasterUsername": "postgres",
-                "MasterUserPassword": {
-                    "Ref": "DatabasePassword"
-                },
+                "MasterUserPassword": { "Ref": "DatabasePassword" },
                 "DBSecurityGroups": [
-                    {
-                        "Ref": "DatabaseSecurityGroup"
-                    }
+                    { "Ref": "DatabaseSecurityGroup" }
                 ],
-                "DBSubnetGroupName": {
-                    "Ref": "DatabaseSubnetGroup"
-                }
+                "DBSubnetGroupName": { "Ref": "DatabaseSubnetGroup" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -64,9 +58,7 @@
         "DatabaseSecurityGroup": {
             "Type": "AWS::RDS::DBSecurityGroup",
             "Properties": {
-                "EC2VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                },
+                "EC2VpcId": { "Ref": "ExpressSeedVPC" },
                 "GroupDescription": "Security group for express-seed database"
             },
             "Metadata": {
@@ -94,9 +86,7 @@
             "Properties": {
                 "AvailabilityZone": "us-east-1b",
                 "CidrBlock": "10.0.3.0/24",
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                }
+                "VpcId": { "Ref": "ExpressSeedVPC" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -109,9 +99,7 @@
             "Properties": {
                 "AvailabilityZone": "us-east-1a",
                 "CidrBlock": "10.0.2.0/24",
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                }
+                "VpcId": { "Ref": "ExpressSeedVPC" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -124,9 +112,7 @@
             "Properties": {
                 "AvailabilityZone": "us-east-1a",
                 "CidrBlock": "10.0.1.0/24",
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                }
+                "VpcId": { "Ref": "ExpressSeedVPC" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -139,12 +125,8 @@
             "Properties": {
                 "DBSubnetGroupDescription": "Subnet group for express-seed database",
                 "SubnetIds": [
-                    {
-                        "Ref": "PrivateSubnet0"
-                    },
-                    {
-                        "Ref": "PrivateSubnet1"
-                    }
+                    { "Ref": "PrivateSubnet0" },
+                    { "Ref": "PrivateSubnet1" }
                 ]
             },
             "Metadata": {
@@ -165,12 +147,8 @@
         "InternetGatewayAttachment": {
             "Type": "AWS::EC2::VPCGatewayAttachment",
             "Properties": {
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                },
-                "InternetGatewayId": {
-                    "Ref": "VPCInternetGateway"
-                }
+                "VpcId": { "Ref": "ExpressSeedVPC" },
+                "InternetGatewayId": { "Ref": "VPCInternetGateway" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -181,18 +159,14 @@
         "ExpressSeedEnvironment": {
             "Type": "AWS::ElasticBeanstalk::Environment",
             "Properties": {
-                "ApplicationName": {
-                    "Ref": "ExpressSeedApplication"
-                },
+                "ApplicationName": { "Ref": "ExpressSeedApplication" },
                 "EnvironmentName": "ExpressSeedEnvironment",
                 "SolutionStackName": "64bit Amazon Linux 2 v3.4.17 running Docker",
                 "Tier": {
                     "Name": "WebServer",
                     "Type": "Standard"
                 },
-                "VersionLabel": {
-                    "Ref": "ExpressSeedApplicationVersion"
-                },
+                "VersionLabel": { "Ref": "ExpressSeedApplicationVersion" },
                 "OptionSettings": [
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
@@ -214,37 +188,27 @@
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
                         "OptionName": "APP_PORT",
-                        "Value": {
-                            "Ref": "HTTPPort"
-                        }
+                        "Value": { "Ref": "HTTPPort" }
                     },
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
                         "OptionName": "PORT_SECURE",
-                        "Value": {
-                            "Ref": "HTTPSPort"
-                        }
+                        "Value": { "Ref": "HTTPSPort" }
                     },
                     {
                         "Namespace": "aws:ec2:vpc",
                         "OptionName": "VPCId",
-                        "Value": {
-                            "Ref": "ExpressSeedVPC"
-                        }
+                        "Value": { "Ref": "ExpressSeedVPC" }
                     },
                     {
                         "Namespace": "aws:ec2:vpc",
                         "OptionName": "Subnets",
-                        "Value": {
-                            "Ref": "PublicSubnet"
-                        }
+                        "Value": { "Ref": "PublicSubnet" }
                     },
                     {
                         "Namespace": "aws:ec2:vpc",
                         "OptionName": "ELBSubnets",
-                        "Value": {
-                            "Ref": "PublicSubnet"
-                        }
+                        "Value": { "Ref": "PublicSubnet" }
                     },
                     {
                         "Namespace": "aws:elasticbeanstalk:application",
@@ -264,16 +228,12 @@
                     {
                         "Namespace": "aws:elb:loadbalancer",
                         "OptionName": "SecurityGroups",
-                        "Value": {
-                            "Ref": "LoadBalancerSG"
-                        }
+                        "Value": { "Ref": "LoadBalancerSG" }
                     },
                     {
                         "Namespace": "aws:elb:loadbalancer",
                         "OptionName": "ManagedSecurityGroup",
-                        "Value": {
-                            "Ref": "LoadBalancerSG"
-                        }
+                        "Value": { "Ref": "LoadBalancerSG" }
                     },
                     {
                         "Namespace": "aws:ec2:vpc",
@@ -283,9 +243,7 @@
                     {
                         "Namespace": "aws:autoscaling:launchconfiguration",
                         "OptionName": "SecurityGroups",
-                        "Value": {
-                            "Ref": "EC2InstanceSG"
-                        }
+                        "Value": { "Ref": "EC2InstanceSG" }
                     }
                 ]
             },
@@ -307,16 +265,10 @@
         "ExpressSeedApplicationVersion": {
             "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
             "Properties": {
-                "ApplicationName": {
-                    "Ref": "ExpressSeedApplication"
-                },
+                "ApplicationName": { "Ref": "ExpressSeedApplication" },
                 "SourceBundle": {
-                    "S3Bucket": {
-                        "Ref": "S3Bucket"
-                    },
-                    "S3Key": {
-                        "Ref": "S3BucketKey"
-                    }
+                    "S3Bucket": { "Ref": "S3Bucket" },
+                    "S3Key": { "Ref": "S3BucketKey" }
                 }
             },
             "Metadata": {
@@ -333,12 +285,8 @@
                 }
             },
             "Properties": {
-                "DBSecurityGroupName": {
-                    "Ref": "DatabaseSecurityGroup"
-                },
-                "EC2SecurityGroupId": {
-                    "Ref": "EC2InstanceSG"
-                }
+                "DBSecurityGroupName": { "Ref": "DatabaseSecurityGroup" },
+                "EC2SecurityGroupId": { "Ref": "EC2InstanceSG" }
             },
             "DependsOn": [
                 "ExpressSeedEnvironment"
@@ -347,9 +295,7 @@
         "PublicSubnetRouteTable": {
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                }
+                "VpcId": { "Ref": "ExpressSeedVPC" }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -360,12 +306,8 @@
         "InternetRoute": {
             "Type": "AWS::EC2::Route",
             "Properties": {
-                "RouteTableId": {
-                    "Ref": "PublicSubnetRouteTable"
-                },
-                "GatewayId": {
-                    "Ref": "VPCInternetGateway"
-                },
+                "RouteTableId": { "Ref": "PublicSubnetRouteTable" },
+                "GatewayId": { "Ref": "VPCInternetGateway" },
                 "DestinationCidrBlock": "0.0.0.0/0"
             },
             "Metadata": {
@@ -377,21 +319,15 @@
         "PublicSubnetRouteAssociation": {
             "Type": "AWS::EC2::SubnetRouteTableAssociation",
             "Properties": {
-                "RouteTableId": {
-                    "Ref": "PublicSubnetRouteTable"
-                },
-                "SubnetId": {
-                    "Ref": "PublicSubnet"
-                }
+                "RouteTableId": { "Ref": "PublicSubnetRouteTable" },
+                "SubnetId": { "Ref": "PublicSubnet" }
             }
         },
         "LoadBalancerSG": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "Load Balancer Security Group",
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                },
+                "VpcId": { "Ref": "ExpressSeedVPC" },
                 "SecurityGroupIngress": [
                     {
                         "CidrIp": "0.0.0.0/0",
@@ -431,25 +367,19 @@
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "VPC Security Group",
-                "VpcId": {
-                    "Ref": "ExpressSeedVPC"
-                },
+                "VpcId": { "Ref": "ExpressSeedVPC" },
                 "SecurityGroupIngress": [
                     {
                         "FromPort": {"Ref": "HTTPPort"},
                         "ToPort": {"Ref": "HTTPPort"},
                         "IpProtocol": "tcp",
-                        "SourceSecurityGroupId": {
-                            "Ref": "LoadBalancerSG"
-                        }
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
                     },
                     {
                         "FromPort": {"Ref": "HTTPSPort"},
                         "ToPort": {"Ref": "HTTPSPort"},
                         "IpProtocol": "tcp",
-                        "SourceSecurityGroupId": {
-                            "Ref": "LoadBalancerSG"
-                        }
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
                     }
                 ]
             },
