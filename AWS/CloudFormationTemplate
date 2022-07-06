@@ -181,9 +181,7 @@
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
                         "OptionName": "RDS_PASSWORD",
-                        "Value": {
-                            "Ref":"DatabasePassword"
-                        }
+                        "Value": { "Ref":"DatabasePassword" }
                     },
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
@@ -218,7 +216,7 @@
                     {
                         "Namespace": {"Fn::Join" : ["", ["aws:elb:listener:", {"Ref": "HTTPPort"}]]},
                         "OptionName": "InstancePort",
-                        "Value": {"Ref": "HTTPPort"}
+                        "Value": { "Ref": "HTTPPort" }
                     },
                     {
                         "Namespace": "aws:autoscaling:launchconfiguration",
@@ -370,14 +368,14 @@
                 "VpcId": { "Ref": "ExpressSeedVPC" },
                 "SecurityGroupIngress": [
                     {
-                        "FromPort": {"Ref": "HTTPPort"},
-                        "ToPort": {"Ref": "HTTPPort"},
+                        "FromPort": { "Ref": "HTTPPort" },
+                        "ToPort": { "Ref": "HTTPPort" },
                         "IpProtocol": "tcp",
                         "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
                     },
                     {
-                        "FromPort": {"Ref": "HTTPSPort"},
-                        "ToPort": {"Ref": "HTTPSPort"},
+                        "FromPort": { "Ref": "HTTPSPort" },
+                        "ToPort": { "Ref": "HTTPSPort" },
                         "IpProtocol": "tcp",
                         "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
                     }
