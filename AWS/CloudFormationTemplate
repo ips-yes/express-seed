@@ -181,7 +181,7 @@
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
                         "OptionName": "RDS_PASSWORD",
-                        "Value": { "Ref":"DatabasePassword" }
+                        "Value": { "Ref": "DatabasePassword" }
                     },
                     {
                         "Namespace": "aws:elasticbeanstalk:application:environment",
