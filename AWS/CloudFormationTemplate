@@ -1,0 +1,800 @@
+{
+    "Outputs": {},
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "DatabasePassword": {
+            "NoEcho": "true",
+            "Type": "String",
+            "Description": "Master password for the postgres user on the database.",
+            "Default": ""
+        },
+        "S3Bucket": {
+            "NoEcho": "false",
+            "Type": "String",
+            "Description": "The name of the amazon s3 bucket with your application's compose file/source bundle.",
+            "Default": ""
+        },
+        "S3BucketKey": {
+            "NoEcho": "false",
+            "Type": "String",
+            "Description": "The key of your compose file/source bundle in your amazon s3 bucket.",
+            "Default": ""
+        },
+        "HTTPPort": {
+            "NoEcho": "false",
+            "Type": "Number",
+            "Description": "The port to listen for HTTP traffic on.",
+            "Default": 80
+        },
+        "HTTPSPort": {
+            "NoEcho": "false",
+            "Type": "Number",
+            "Description": "The port to listen for HTTPS traffic on.",
+            "Default": 22
+        }
+    },
+    "Resources": {
+        "PostgresDatabase": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "AllocatedStorage": "20",
+                "DBName": "expressSeedDatabase",
+                "DBInstanceClass": "db.t3.micro",
+                "AvailabilityZone": "us-east-1a",
+                "Engine": "postgres",
+                "MasterUsername": "postgres",
+                "MasterUserPassword": { "Ref": "DatabasePassword" },
+                "DBSecurityGroups": [
+                    { "Ref": "DatabaseSecurityGroup" }
+                ],
+                "DBSubnetGroupName": { "Ref": "DatabaseSubnetGroup" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "e6dea2a2-e6fa-403c-8d96-eda908b42235"
+                }
+            }
+        },
+        "DatabaseSecurityGroup": {
+            "Type": "AWS::RDS::DBSecurityGroup",
+            "Properties": {
+                "EC2VpcId": { "Ref": "ExpressSeedVPC" },
+                "GroupDescription": "Security group for express-seed database"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "7ca3d942-20d2-4ed4-9a55-a14d6f2c0057"
+                }
+            }
+        },
+        "ExpressSeedVPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "eab559ff-2261-435d-ad48-533a321ba568"
+                }
+            },
+            "DependsOn": [
+                "VPCInternetGateway"
+            ]
+        },
+        "PrivateSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "us-east-1b",
+                "CidrBlock": "10.0.3.0/24",
+                "VpcId": { "Ref": "ExpressSeedVPC" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ab286eb4-b6cf-4346-83df-1df8f5e6b2b5"
+                }
+            }
+        },
+        "PrivateSubnet0": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "us-east-1a",
+                "CidrBlock": "10.0.2.0/24",
+                "VpcId": { "Ref": "ExpressSeedVPC" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "86796ff3-0e99-422f-90af-a6ace41baf90"
+                }
+            }
+        },
+        "PublicSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "us-east-1a",
+                "CidrBlock": "10.0.1.0/24",
+                "VpcId": { "Ref": "ExpressSeedVPC" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "76819a5d-0cd8-4b2c-bd7e-3577be3b84bb"
+                }
+            }
+        },
+        "DatabaseSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "Subnet group for express-seed database",
+                "SubnetIds": [
+                    { "Ref": "PrivateSubnet0" },
+                    { "Ref": "PrivateSubnet1" }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "077885ee-5145-49e2-bb08-cd44a5952014"
+                }
+            }
+        },
+        "VPCInternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5f2c2c47-0ad8-4b12-a026-44addb6f43d7"
+                }
+            }
+        },
+        "InternetGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": { "Ref": "ExpressSeedVPC" },
+                "InternetGatewayId": { "Ref": "VPCInternetGateway" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "da161a98-a9d3-4d3f-8f12-70c94973ff1d"
+                }
+            }
+        },
+        "ExpressSeedEnvironment": {
+            "Type": "AWS::ElasticBeanstalk::Environment",
+            "Properties": {
+                "ApplicationName": { "Ref": "ExpressSeedApplication" },
+                "EnvironmentName": "ExpressSeedEnvironment",
+                "SolutionStackName": "64bit Amazon Linux 2 v3.4.17 running Docker",
+                "Tier": {
+                    "Name": "WebServer",
+                    "Type": "Standard"
+                },
+                "VersionLabel": { "Ref": "ExpressSeedApplicationVersion" },
+                "OptionSettings": [
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "RDS_HOSTNAME",
+                        "Value": {
+                            "Fn::GetAtt": [
+                                "PostgresDatabase",
+                                "Endpoint.Address"
+                            ]
+                        }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "RDS_PASSWORD",
+                        "Value": { "Ref": "DatabasePassword" }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "APP_PORT",
+                        "Value": { "Ref": "HTTPPort" }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application:environment",
+                        "OptionName": "PORT_SECURE",
+                        "Value": { "Ref": "HTTPSPort" }
+                    },
+                    {
+                        "Namespace": "aws:ec2:vpc",
+                        "OptionName": "VPCId",
+                        "Value": { "Ref": "ExpressSeedVPC" }
+                    },
+                    {
+                        "Namespace": "aws:ec2:vpc",
+                        "OptionName": "Subnets",
+                        "Value": { "Ref": "PublicSubnet" }
+                    },
+                    {
+                        "Namespace": "aws:ec2:vpc",
+                        "OptionName": "ELBSubnets",
+                        "Value": { "Ref": "PublicSubnet" }
+                    },
+                    {
+                        "Namespace": "aws:elasticbeanstalk:application",
+                        "OptionName": "Application Healthcheck URL",
+                        "Value": {"Fn::Join" : ["", ["HTTP:", {"Ref": "HTTPPort"}, "/express-server/api/v1/check"]]}
+                    },
+                    {
+                        "Namespace": {"Fn::Join" : ["", ["aws:elb:listener:", {"Ref": "HTTPPort"}]]},
+                        "OptionName": "InstancePort",
+                        "Value": { "Ref": "HTTPPort" }
+                    },
+                    {
+                        "Namespace": "aws:autoscaling:launchconfiguration",
+                        "OptionName": "IamInstanceProfile",
+                        "Value": "aws-elasticbeanstalk-ec2-role"
+                    },
+                    {
+                        "Namespace": "aws:elb:loadbalancer",
+                        "OptionName": "SecurityGroups",
+                        "Value": { "Ref": "LoadBalancerSG" }
+                    },
+                    {
+                        "Namespace": "aws:elb:loadbalancer",
+                        "OptionName": "ManagedSecurityGroup",
+                        "Value": { "Ref": "LoadBalancerSG" }
+                    },
+                    {
+                        "Namespace": "aws:ec2:vpc",
+                        "OptionName": "AssociatePublicIpAddress",
+                        "Value": "true"
+                    },
+                    {
+                        "Namespace": "aws:autoscaling:launchconfiguration",
+                        "OptionName": "SecurityGroups",
+                        "Value": { "Ref": "EC2InstanceSG" }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "e04764df-6a91-4bf7-9841-9cd150de1fe3"
+                }
+            }
+        },
+        "ExpressSeedApplication": {
+            "Type": "AWS::ElasticBeanstalk::Application",
+            "Properties": {},
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "4e352d07-8d93-4697-8e47-73499a45a01d"
+                }
+            }
+        },
+        "ExpressSeedApplicationVersion": {
+            "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+            "Properties": {
+                "ApplicationName": { "Ref": "ExpressSeedApplication" },
+                "SourceBundle": {
+                    "S3Bucket": { "Ref": "S3Bucket" },
+                    "S3Key": { "Ref": "S3BucketKey" }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1972ee92-a942-438a-aec0-c360edfe03ff"
+                }
+            }
+        },
+        "DBSGIngress1": {
+            "Type": "AWS::RDS::DBSecurityGroupIngress",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a59eb856-9580-4ce8-8f17-82c088d92e13"
+                }
+            },
+            "Properties": {
+                "DBSecurityGroupName": { "Ref": "DatabaseSecurityGroup" },
+                "EC2SecurityGroupId": { "Ref": "EC2InstanceSG" }
+            },
+            "DependsOn": [
+                "ExpressSeedEnvironment"
+            ]
+        },
+        "PublicSubnetRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": { "Ref": "ExpressSeedVPC" }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "d6b52ddf-dd61-46e9-9703-caf92a42cea2"
+                }
+            }
+        },
+        "InternetRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": { "Ref": "PublicSubnetRouteTable" },
+                "GatewayId": { "Ref": "VPCInternetGateway" },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fd9922db-ad70-476e-864e-ffafcd0f81c5"
+                }
+            }
+        },
+        "PublicSubnetRouteAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "PublicSubnetRouteTable" },
+                "SubnetId": { "Ref": "PublicSubnet" }
+            }
+        },
+        "LoadBalancerSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Load Balancer Security Group",
+                "VpcId": { "Ref": "ExpressSeedVPC" },
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {"Ref": "HTTPPort"},
+                        "ToPort": {"Ref": "HTTPPort"},
+                        "IpProtocol": "tcp"
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {"Ref": "HTTPSPort"},
+                        "ToPort": {"Ref": "HTTPSPort"},
+                        "IpProtocol": "tcp"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {"Ref": "HTTPPort"},
+                        "ToPort": {"Ref": "HTTPPort"},
+                        "IpProtocol": "tcp"
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {"Ref": "HTTPSPort"},
+                        "ToPort": {"Ref": "HTTPSPort"},
+                        "IpProtocol": "tcp"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f6844e09-2ffe-4b61-b3bb-401c030d6c19"
+                }
+            }
+        },
+        "EC2InstanceSG": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "VPC Security Group",
+                "VpcId": { "Ref": "ExpressSeedVPC" },
+                "SecurityGroupIngress": [
+                    {
+                        "FromPort": { "Ref": "HTTPPort" },
+                        "ToPort": { "Ref": "HTTPPort" },
+                        "IpProtocol": "tcp",
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
+                    },
+                    {
+                        "FromPort": { "Ref": "HTTPSPort" },
+                        "ToPort": { "Ref": "HTTPSPort" },
+                        "IpProtocol": "tcp",
+                        "SourceSecurityGroupId": { "Ref": "LoadBalancerSG" }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a4948336-a0f5-4272-b1a7-7b3f4e07323f"
+                }
+            }
+        }
+    },
+    "Description": "VPC, Database, and Elastic Beanstalk environment for express-seed program",
+    "Mappings": {
+        "ContainerMetaARM": {
+            "AMIMeta": {
+                "RepoReleaseVersion": "2.0",
+                "Owner": "amazon",
+                "AMIVersion": "2.0.20220426",
+                "AMIName": "amzn2-ami-hvm-2.0.20220426.0-arm64-gp2"
+            }
+        },
+        "AWSEBAWSRegionArch2AMIBase": {
+            "us-east-1": {
+                "pv": "",
+                "graphics": "",
+                "gpu": "",
+                "hvm": "ami-06eecef118bbf9259"
+            }
+        },
+        "AWSEBAWSRegionArch2AMI": {
+            "us-east-1": {
+                "pv": "",
+                "graphics": "",
+                "gpu": "",
+                "hvm": "ami-01af6b3abf45ec711"
+            }
+        },
+        "EnvironmentInfoTasks": {
+            "systemtail": {
+                "LocationPrefix": "resources/environments/logs/systemtail/",
+                "AutoClean": "true",
+                "CommandName": "CMD-SystemTailLogs"
+            },
+            "tail": {
+                "LocationPrefix": "resources/environments/logs/tail/",
+                "AutoClean": "true",
+                "CommandName": "CMD-TailLogs"
+            },
+            "publish": {
+                "LocationPrefix": "resources/environments/logs/publish/"
+            },
+            "bundle": {
+                "LocationPrefix": "resources/environments/logs/bundle/",
+                "AutoClean": "true",
+                "CommandName": "CMD-BundleLogs"
+            }
+        },
+        "AWSEBAWSRegionArch2AMIBaseARM": {
+            "us-east-1": {
+                "pv": "",
+                "graphics": "",
+                "gpu": "",
+                "hvm": "ami-090230ed0c6b13c74"
+            }
+        },
+        "AWSEBAWSRegionArch2AMIARM": {
+            "us-east-1": {
+                "pv": "",
+                "graphics": "",
+                "gpu": "",
+                "hvm": "ami-0e8b3cc8105e43eda"
+            }
+        },
+        "ContainerMeta": {
+            "AMIMeta": {
+                "RepoReleaseVersion": "2.0",
+                "Owner": "amazon",
+                "AMIVersion": "2.0.20220426",
+                "AMIName": "amzn2-ami-hvm-2.0.20220426.0-x86_64-gp2"
+            }
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "e6dea2a2-e6fa-403c-8d96-eda908b42235": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 330,
+                    "y": -80
+                },
+                "z": 0,
+                "embeds": [],
+                "isassociatedwith": [
+                    "7ca3d942-20d2-4ed4-9a55-a14d6f2c0057"
+                ],
+                "iscontainedinside": [
+                    "077885ee-5145-49e2-bb08-cd44a5952014"
+                ]
+            },
+            "7ca3d942-20d2-4ed4-9a55-a14d6f2c0057": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 230,
+                    "y": -120
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "eab559ff-2261-435d-ad48-533a321ba568"
+                ]
+            },
+            "eab559ff-2261-435d-ad48-533a321ba568": {
+                "size": {
+                    "width": 170,
+                    "height": 130
+                },
+                "position": {
+                    "x": -120,
+                    "y": -110
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "5f2c2c47-0ad8-4b12-a026-44addb6f43d7"
+                ]
+            },
+            "ab286eb4-b6cf-4346-83df-1df8f5e6b2b5": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": -310,
+                    "y": 10
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "86796ff3-0e99-422f-90af-a6ace41baf90": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": -460,
+                    "y": 10
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "76819a5d-0cd8-4b2c-bd7e-3577be3b84bb": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": -610,
+                    "y": 10
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "077885ee-5145-49e2-bb08-cd44a5952014": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": -120,
+                    "y": -270
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "5f2c2c47-0ad8-4b12-a026-44addb6f43d7": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -60,
+                    "y": 40
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "da161a98-a9d3-4d3f-8f12-70c94973ff1d": {
+                "source": {
+                    "id": "eab559ff-2261-435d-ad48-533a321ba568"
+                },
+                "target": {
+                    "id": "5f2c2c47-0ad8-4b12-a026-44addb6f43d7"
+                },
+                "z": 0
+            },
+            "e04764df-6a91-4bf7-9841-9cd150de1fe3": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 100,
+                    "y": 140
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "4e352d07-8d93-4697-8e47-73499a45a01d"
+                ]
+            },
+            "4e352d07-8d93-4697-8e47-73499a45a01d": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": 200,
+                    "y": 70
+                },
+                "z": 0,
+                "embeds": [
+                    "1972ee92-a942-438a-aec0-c360edfe03ff"
+                ]
+            },
+            "1972ee92-a942-438a-aec0-c360edfe03ff": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 270.44737563798986,
+                    "y": 142.33296803087748
+                },
+                "z": 1,
+                "parent": "4e352d07-8d93-4697-8e47-73499a45a01d",
+                "embeds": [],
+                "iscontainedinside": [
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d",
+                    "4e352d07-8d93-4697-8e47-73499a45a01d"
+                ]
+            },
+            "a59eb856-9580-4ce8-8f17-82c088d92e13": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 110,
+                    "y": -40
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "e04764df-6a91-4bf7-9841-9cd150de1fe3"
+                ]
+            },
+            "d6b52ddf-dd61-46e9-9703-caf92a42cea2": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": -780,
+                    "y": 10
+                },
+                "z": 0,
+                "embeds": [
+                    "fd9922db-ad70-476e-864e-ffafcd0f81c5"
+                ]
+            },
+            "fd9922db-ad70-476e-864e-ffafcd0f81c5": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -710,
+                    "y": 80
+                },
+                "z": 1,
+                "parent": "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                "embeds": [],
+                "isassociatedwith": [
+                    "5f2c2c47-0ad8-4b12-a026-44addb6f43d7"
+                ],
+                "iscontainedinside": [
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2",
+                    "d6b52ddf-dd61-46e9-9703-caf92a42cea2"
+                ]
+            },
+            "f6844e09-2ffe-4b61-b3bb-401c030d6c19": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 100,
+                    "y": 220
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "eab559ff-2261-435d-ad48-533a321ba568"
+                ]
+            },
+            "a4948336-a0f5-4272-b1a7-7b3f4e07323f": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -10,
+                    "y": 220
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "eab559ff-2261-435d-ad48-533a321ba568"
+                ]
+            }
+        }
+    }
+}
