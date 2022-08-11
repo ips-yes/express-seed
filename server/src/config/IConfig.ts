@@ -30,6 +30,8 @@ export interface IDatabaseConfig {
     USER: string;
     PASSWORD: string;
     SYNC: boolean;
+    AUTO_RECONNECT: boolean;
+    RECONNECT_PERIOD: number;
 }
 export interface ISessionConfig {
     staleSessionTimeToLiveInDays: number;

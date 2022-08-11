@@ -37,6 +37,9 @@ const config : IConfig = {
     USER: envVars.RDS_USERNAME,
     PASSWORD: envVars.RDS_PASSWORD,
     SYNC: Boolean(envVars.DB_SYNC),
+    AUTO_RECONNECT: Boolean(envVars.DB_AUTO_RECONNECT),
+    RECONNECT_PERIOD: +envVars.DB_RECONNECT_PERIOD,
+
   },
   sessionLife: {
     staleSessionTimeToLiveInDays: +envVars.STALE_SESSION_TIME_TO_LIVE_IN_DAYS,

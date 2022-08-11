@@ -5,13 +5,13 @@ import * as cookieParser from 'cookie-parser';
 import https from 'https';
 import passport from 'passport';
 import upload from 'express-fileupload';
+import * as databasePing from './utils/DatabasePing';
 import config from './config/index';
-import db from './models';
 import logger from './utils/Logger';
 import router from './Routes';
 import UserController from './features/users/UserController';
 
-const DB_PARAMS = config.db;
+const ping = databasePing.default;
 
 export default class Server {
     private app: Express;
@@ -38,20 +38,28 @@ export default class Server {
       // =============================================================================================== //
 
       // Verify database connection and sync if we wish
-      try {
-        await db.sequelize.authenticate();
-        if (DB_PARAMS.SYNC) {
-          await db.sequelize.sync(); // If this is enabled in config.json it will sync the DB to the code
-          // Create default user types if there are none
-          const userTypes = await db.UserType.findAll({});
-          if (userTypes.length === 0) {
-            await db.UserType.create({ value: 'Admin' });
-            await db.UserType.create({ value: 'User' });
-          }
+      let DBConnectionMessage = 'Database not found, will attempt to reconnect on next db reliant request';
+
+      if (config.db.AUTO_RECONNECT) {
+        DBConnectionMessage += ` or after ${config.db.RECONNECT_PERIOD} ms`;
+      }
+
+      ping.getPromise().then((online) => {
+        if (!online) {
+          logger.warn(DBConnectionMessage);
         }
-      } catch (e) {
-        logger.error(`Database configuration failed due to: ${e.message}`);
-        onServerClosed();
+      });
+
+      if (config.db.AUTO_RECONNECT) {
+        setInterval(() => {
+          if (!ping.databaseConnected) {
+            ping.getPromise().then((online) => {
+              if (!online) {
+                logger.warn(DBConnectionMessage);
+              }
+            });
+          }
+        }, config.db.RECONNECT_PERIOD);
       }
 
       // =============================================================================================== //
